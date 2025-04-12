@@ -9,7 +9,7 @@
 
 global $suffusion, $query_string, $wp_query, $suffusion_current_post_index, $suffusion_full_post_count_for_view, $suffusion_blog_layout, $suffusion_duplicate_posts;
 $suffusion_blog_layout = true;
-if (!isset($suffusion_duplicate_posts)) $suffusion_duplicate_posts = array();
+$suffusion_duplicate_posts = $suffusion_duplicate_posts ?? [];
 
 global $post, $suffusion_cpt_post_id;
 if (have_posts()) {
@@ -23,28 +23,28 @@ if (have_posts()) {
 	while (have_posts()) {
 		the_post();
 		$original_post = $post;
-		if (in_array($post->ID, $suffusion_duplicate_posts)) {
+		if (in_array($post->ID, $suffusion_duplicate_posts, true)) {
 			continue;
 		}
 		$suffusion_current_post_index++;
 
 		global $suf_category_excerpt, $suf_tag_excerpt, $suf_archive_excerpt, $suf_index_excerpt, $suf_search_excerpt, $suf_author_excerpt, $suf_show_excerpt_thumbnail, $suffusion_current_post_index, $suffusion_full_post_count_for_view, $suf_pop_excerpt, $page_of_posts;
 
-		if (($suffusion_current_post_index > $suffusion_full_post_count_for_view) && ((is_category() && $suf_category_excerpt == "excerpt") ||
-			(is_tag() && $suf_tag_excerpt == "excerpt") ||
-			(is_search() && $suf_search_excerpt == "excerpt") ||
-			(is_author() && $suf_author_excerpt == "excerpt") ||
-			((is_date() || is_year() || is_month() || is_day() || is_time())&& $suf_archive_excerpt == "excerpt") ||
-			(isset($page_of_posts) && $page_of_posts && $suf_pop_excerpt == "excerpt") ||
-			(!(is_singular() || is_category() || is_tag() || is_search() || is_author() || is_date() || is_year() || is_month() || is_day() || is_time()) && $suf_index_excerpt == "excerpt"))) {
-			$show_image = $suf_show_excerpt_thumbnail == "show" ? true : false;
-			$classes = array('excerpt');
+		if (($suffusion_current_post_index > $suffusion_full_post_count_for_view) && ((is_category() && $suf_category_excerpt === "excerpt") ||
+			(is_tag() && $suf_tag_excerpt === "excerpt") ||
+			(is_search() && $suf_search_excerpt === "excerpt") ||
+			(is_author() && $suf_author_excerpt === "excerpt") ||
+			((is_date() || is_year() || is_month() || is_day() || is_time()) && $suf_archive_excerpt === "excerpt") ||
+			(isset($page_of_posts) && $page_of_posts && $suf_pop_excerpt === "excerpt") ||
+			(!(is_singular() || is_category() || is_tag() || is_search() || is_author() || is_date() || is_year() || is_month() || is_day() || is_time()) && $suf_index_excerpt === "excerpt"))) {
+			$show_image = $suf_show_excerpt_thumbnail === "show";
+			$classes = ['excerpt'];
 		}
 		else {
-			$classes = array('full-content');
+			$classes = ['full-content'];
 		}
 		if (isset($cpt_meta_position) && $cpt_meta_position) {
-			$classes[] = 'meta-position-'.$cpt_meta_position;
+			$classes[] = 'meta-position-' . $cpt_meta_position;
 		}
 
 		do_action('suffusion_before_post', $post->ID, 'blog', $suffusion_current_post_index);

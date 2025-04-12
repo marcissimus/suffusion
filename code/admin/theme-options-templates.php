@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Lists out all the options from the Templates Section of the theme options
  * This file is included in functions.php
@@ -8,6 +9,7 @@
  */
 
 global $suffusion_404_title, $suffusion_404_content, $suffusion_all_sitemap_entities, $suffusion_sitemap_entities;
+
 $suffusion_templates_options = array(
 	array("name" => "Templates",
 		"type" => "sub-section-2",
@@ -298,7 +300,7 @@ $suffusion_templates_options = array(
 			"1" => "Transform to desired proportions (image might get cropped)"),
 		"std" => "default"),
 
-	array("name" => "Magazine template - Alignment of post title in Excerpts",
+	array("name" => "Magazine Template - Alignment of post title in Excerpts",
 		"desc" => "You can set the alignment for the post title in the excerpts: ",
 		"id" => "suf_mag_excerpt_title_alignment",
 		"grouping" => "mag-excerpt",

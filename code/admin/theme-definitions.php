@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 global $suf_theme_definitions, $suf_element_mapping;
 $root_options = array(
 	"body/color" => "#000000",
@@ -641,30 +643,39 @@ $suf_element_mapping = array(
 	"suf_post_background_color" => ".post/background-color",
 );
 
-function suffusion_evaluate_style($style_name, $suffusion_theme_name = "root", $null_return = 'default') {
+/**
+ * Evaluates a style based on theme name and returns the appropriate value
+ * 
+ * @param string $style_name
+ * @param string $suffusion_theme_name
+ * @param string $null_return
+ * @return string
+ */
+function suffusion_evaluate_style(string $style_name, string $suffusion_theme_name = "root", string $null_return = 'default'): string {
 	global $suf_theme_definitions, $suf_element_mapping;
+	
 	if (isset($suf_element_mapping[$style_name])) {
 		$mapped_style = $suf_element_mapping[$style_name];
 		if (isset($suf_theme_definitions[$suffusion_theme_name])) {
 			$style_settings = $suf_theme_definitions[$suffusion_theme_name];
 			if (isset($style_settings[$mapped_style])) {
-				return $style_settings[$mapped_style];
+				return (string)$style_settings[$mapped_style];
 			}
-			else {
-				if (isset($style_settings["parent"])) {
-					$parent = $style_settings["parent"];
-					$ancestors = explode(",",$parent);
-					foreach ($ancestors as $ancestor) {
-						$recursive = suffusion_evaluate_style($style_name, $ancestor, $null_return);
-						if ($recursive != null) {
-							return $recursive;
-						}
+			
+			if (isset($style_settings["parent"])) {
+				$parent = $style_settings["parent"];
+				$ancestors = explode(",", $parent);
+				foreach ($ancestors as $ancestor) {
+					$recursive = suffusion_evaluate_style($style_name, trim($ancestor), $null_return);
+					if ($recursive !== null) {
+						return $recursive;
 					}
 				}
 			}
 		}
 	}
-	if ($null_return == 'empty') {
+	
+	if ($null_return === 'empty') {
 		return '';
 	}
 	return '#ffffff';

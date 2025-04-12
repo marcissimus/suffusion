@@ -6,9 +6,12 @@
  * @subpackage Functions
  */
 class Suffusion {
-	var $context, $body_layout, $content_layout, $user_agent;
+	private array $context;
+	private string $body_layout;
+	private string $content_layout;
+	private string $user_agent;
 
-	function init() {
+	public function __construct() {
 		if (function_exists('icl_register_string')) {
 			$this->set_translatable_fields();
 		}
@@ -17,7 +20,7 @@ class Suffusion {
 		$this->content_layout = 'full-content';
 	}
 
-	function get_context() {
+	public function get_context(): array {
 		global $wp_query;
 
 		if (is_array($this->context)) {
@@ -104,13 +107,13 @@ class Suffusion {
 	 *
 	 * @return void
 	 */
-	function set_translatable_fields() {
+	public function set_translatable_fields(): void {
 		if (function_exists('icl_t')) {
 			suffusion_set_translatable_fields();
 		}
 	}
 
-	function set_image_sizes() {
+	public function set_image_sizes(): void {
 		global $suf_excerpt_thumbnail_size, $suf_excerpt_thumbnail_custom_width, $suf_excerpt_thumbnail_custom_height, $suf_excerpt_tt_zc;
 		global $suf_featured_image_size, $suf_featured_image_custom_width, $suf_featured_image_custom_height, $suf_featured_zc;
 		global $suf_mag_headline_image_size, $suf_mag_headline_image_custom_height, $suf_mag_headline_image_custom_width, $suf_mag_headline_zc;
@@ -191,15 +194,15 @@ class Suffusion {
 		}
 	}
 
-	function set_body_layout($layout) {
+	public function set_body_layout(string $layout): void {
 		$this->body_layout = $layout;
 	}
 
-	function get_body_layout() {
+	public function get_body_layout(): string {
 		return $this->body_layout;
 	}
 
-	function set_content_layout($layout) {
+	public function set_content_layout(string $layout): void {
 		if ($layout == 'content') {
 			$this->content_layout = 'full-content';
 		}
@@ -208,7 +211,7 @@ class Suffusion {
 		}
 	}
 
-	function get_content_layout() {
+	public function get_content_layout(): string {
 		return $this->content_layout;
 	}
 }

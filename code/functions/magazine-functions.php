@@ -5,22 +5,23 @@
  * @return array
  */
 function suffusion_get_headlines() {
-	global $post, $wpdb, $suf_mag_headline_limit;
+	global $post, $wpdb;
 	$headlines = array();
 	$solos = array();
+	$suf_mag_headline_limit = $GLOBALS['suf_mag_headline_limit'] ?? 5;
 	$suf_mag_headline_limit = (int)$suf_mag_headline_limit;
 	$quota_full = false;
 
-	// Previously the script was loading all posts into memory using get_posts and checking the meta field. This causes the code to crash if the # posts is high.
-	$querystr = "SELECT wposts.*
+	$querystr = $wpdb->prepare("
+		SELECT wposts.*
 		FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta
 		WHERE wposts.ID = wpostmeta.post_id
-	    AND wpostmeta.meta_key = 'suf_magazine_headline'
-	    AND wpostmeta.meta_value = 'on'
-	    AND wposts.post_status = 'publish'
-	    AND wposts.post_type = 'post'
-	    ORDER BY wposts.post_date DESC
-	 ";
+		AND wpostmeta.meta_key = %s
+		AND wpostmeta.meta_value = %s
+		AND wposts.post_status = %s
+		AND wposts.post_type = %s
+		ORDER BY wposts.post_date DESC
+	", 'suf_magazine_headline', 'on', 'publish', 'post');
 
 	$head_posts = $wpdb->get_results($querystr, OBJECT);
 	foreach ($head_posts as $post) {
@@ -44,7 +45,11 @@ function suffusion_get_headlines() {
 			$query_cats[] = $headline_category->cat_ID;
 		}
 		$query_posts = implode(",", array_values($query_cats));
-		$cat_query = new WP_Query(array('cat' => $query_posts, 'post__not_in' => $solos));
+		$cat_query = new WP_Query(array(
+			'cat' => $query_posts, 
+			'post__not_in' => $solos,
+			'posts_per_page' => $suf_mag_headline_limit - count($headlines)
+		));
 	}
 
 	if (isset($cat_query->posts) && is_array($cat_query->posts)) {
@@ -67,22 +72,22 @@ function suffusion_get_headlines() {
  * @return array
  */
 function suffusion_get_mag_section_queries($args = array()) {
-	global $post, $wpdb, $suf_mag_total_excerpts;
-	$meta_check_field = $args['meta_check_field'];
+	global $post, $wpdb;
+	$meta_check_field = $args['meta_check_field'] ?? '';
 	$solos = array();
 	$queries = array();
 
 	if ($meta_check_field) {
-		// Previously the script was loading all posts into memory using get_posts and checking the meta field. This causes the code to crash if the # posts is high.
-		$querystr = "SELECT wposts.*
+		$querystr = $wpdb->prepare("
+			SELECT wposts.*
 			FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta
 			WHERE wposts.ID = wpostmeta.post_id
-		    AND wpostmeta.meta_key = '$meta_check_field'
-		    AND wpostmeta.meta_value = 'on'
-		    AND wposts.post_status = 'publish'
-		    AND wposts.post_type = 'post'
-		    ORDER BY wposts.post_date DESC
-		 ";
+			AND wpostmeta.meta_key = %s
+			AND wpostmeta.meta_value = %s
+			AND wposts.post_status = %s
+			AND wposts.post_type = %s
+			ORDER BY wposts.post_date DESC
+		", $meta_check_field, 'on', 'publish', 'post');
 
 		$post_results = $wpdb->get_results($querystr, OBJECT);
 		foreach ($post_results as $post) {
@@ -90,12 +95,15 @@ function suffusion_get_mag_section_queries($args = array()) {
 			$solos[] = $post->ID;
 		}
 	}
+
 	if (count($solos) > 0) {
 		$solo_query = new WP_Query(array('post__in' => $solos, 'ignore_sticky_posts' => 1));
 		$queries[] = $solo_query;
 	}
 
-	$category_prefix = $args['category_prefix'];
+	$category_prefix = $args['category_prefix'] ?? '';
+	$suf_mag_total_excerpts = $GLOBALS['suf_mag_total_excerpts'] ?? 5;
+
 	if ($category_prefix) {
 		$categories = suffusion_get_allowed_categories($category_prefix);
 		if (is_array($categories) && count($categories) > 0) {
@@ -104,7 +112,11 @@ function suffusion_get_mag_section_queries($args = array()) {
 				$query_cats[] = $category->cat_ID;
 			}
 			$query_posts = implode(",", array_values($query_cats));
-			$cat_query = new WP_Query(array('cat' => $query_posts, 'post__not_in' => $solos, 'posts_per_page' => (int)$suf_mag_total_excerpts));
+			$cat_query = new WP_Query(array(
+				'cat' => $query_posts, 
+				'post__not_in' => $solos, 
+				'posts_per_page' => (int)$suf_mag_total_excerpts
+			));
 			$queries[] = $cat_query;
 		}
 	}

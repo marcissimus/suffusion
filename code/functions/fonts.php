@@ -8,7 +8,7 @@
  */
 
 class Suffusion_Fonts {
-	var $fonts;
+	public $fonts;
 
 	function __construct() {
 		$this->init();
@@ -510,8 +510,8 @@ class Suffusion_Fonts {
 
 		);
 
-		add_filter('suffusion_font_list', array(&$this, 'add_fonts'));
-		add_action('wp_enqueue_scripts', array(&$this, 'enqueue_scripts'));
+		add_filter('suffusion_font_list', array($this, 'add_fonts'));
+		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 	}
 
 	function add_fonts($fonts) {
@@ -530,47 +530,48 @@ class Suffusion_Fonts {
 			return;
 		}
 
-		// Font variables
-		global $suf_navt_skin_settings_bg_font, $suf_navt_skin_settings_font, $suf_navt_skin_settings_hover_font, $suf_navt_skin_settings_visited_font;
-		global $suf_navt_skin_settings_hl_font, $suf_nav_skin_settings_bg_font, $suf_nav_skin_settings_font, $suf_nav_skin_settings_hover_font;
-		global $suf_nav_skin_settings_visited_font, $suf_nav_skin_settings_hl_font, $suf_date_box_mfont, $suf_date_box_dfont, $suf_date_box_yfont, $suf_body_font_family;
-		global $suf_post_title_font, $suf_post_title_link_font, $suf_post_title_link_hover_font, $suf_post_h1_font, $suf_post_h2_font, $suf_post_h3_font, $suf_post_h4_font;
-		global $suf_post_h5_font, $suf_post_h6_font, $suf_comment_header_font, $suf_comment_body_font, $suf_footer_text_font, $suf_footer_link_font, $suf_footer_link_hover_font;
-		$font_variables = array(
-			$suf_body_font_family,
-			$suf_navt_skin_settings_bg_font,
-			$suf_navt_skin_settings_font,
-			$suf_navt_skin_settings_hover_font,
-			$suf_navt_skin_settings_visited_font,
-			$suf_navt_skin_settings_hl_font,
-			$suf_nav_skin_settings_bg_font,
-			$suf_nav_skin_settings_font,
-			$suf_nav_skin_settings_hover_font,
-			$suf_nav_skin_settings_visited_font,
-			$suf_nav_skin_settings_hl_font,
-			$suf_date_box_mfont,
-			$suf_date_box_dfont,
-			$suf_date_box_yfont,
-			$suf_post_title_font,
-			$suf_post_title_link_font,
-			$suf_post_title_link_hover_font,
-			$suf_post_h1_font,
-			$suf_post_h2_font,
-			$suf_post_h3_font,
-			$suf_post_h4_font,
-			$suf_post_h5_font,
-			$suf_post_h6_font,
-			$suf_comment_header_font,
-			$suf_comment_body_font,
-			$suf_footer_text_font,
-			$suf_footer_link_font,
-			$suf_footer_link_hover_font
-		);
+		// Font variables - using array access instead of variable variables
+		$font_vars = [
+			'suf_navt_skin_settings_bg_font',
+			'suf_navt_skin_settings_font',
+			'suf_navt_skin_settings_hover_font',
+			'suf_navt_skin_settings_visited_font',
+			'suf_navt_skin_settings_hl_font',
+			'suf_nav_skin_settings_bg_font',
+			'suf_nav_skin_settings_font',
+			'suf_nav_skin_settings_hover_font',
+			'suf_nav_skin_settings_visited_font',
+			'suf_nav_skin_settings_hl_font',
+			'suf_date_box_mfont',
+			'suf_date_box_dfont',
+			'suf_date_box_yfont',
+			'suf_body_font_family',
+			'suf_post_title_font',
+			'suf_post_title_link_font',
+			'suf_post_title_link_hover_font',
+			'suf_post_h1_font',
+			'suf_post_h2_font',
+			'suf_post_h3_font',
+			'suf_post_h4_font',
+			'suf_post_h5_font',
+			'suf_post_h6_font',
+			'suf_comment_header_font',
+			'suf_comment_body_font',
+			'suf_footer_text_font',
+			'suf_footer_link_font',
+			'suf_footer_link_hover_font'
+		];
+
+		$font_variables = array_map(function($var) {
+			return $GLOBALS[$var] ?? null;
+		}, $font_vars);
+
 		$font_names = array();
 		foreach ($this->fonts as $id => $font) {
 			$font_key = "'{$font['family']}', {$font['class']}";
 			$font_names[$font_key] = $id;
 		}
+
 		$font_stack = array();
 		foreach ($font_variables as $variable) {
 			if (is_array($variable) && isset($variable['font-face']) && array_key_exists($variable['font-face'], $font_names)) {
@@ -606,8 +607,6 @@ class Suffusion_Fonts {
 			}
 		}
 
-		// Can be linked using this syntax:
-		// <link href='https://fonts.googleapis.com/css?family=Terminal+Dosis:400,700|Quattrocento|Pompiere|Gentium+Basic:400,400italic,700,700italic|Federo|Open+Sans:400,400italic,700,700italic|Megrim|Droid+Sans:400,700|Amaranth:400,400italic,700,700italic|PT+Sans+Narrow:400,700|Cardo:400,400italic,700|Buda:300|Cuprum|Josefin+Slab:400,400italic,700,700italic|Droid+Serif:400,400italic,700,700italic|PT+Sans:400,400italic,700,700italic|Josefin+Sans:400,400italic,700,700italic|Nova+Square|Coming+Soon|Dancing+Script:400,700|Philosopher:400,400italic,700,700italic|Lobster|Lobster+Two:400,400italic,700,700italic|Tangerine:400,700|Ultra|Nixie+One|Kameron:400,700|Ubuntu:400,400italic,700,700italic|Rosario:400,400italic|Cantarell:400,400italic,700,700italic|Inconsolata|Fanwood+Text:400,400italic' rel='stylesheet' type='text/css'>
 		$esc_fonts = array();
 		foreach ($font_stack as $id) {
 			$font = $this->fonts[$id];

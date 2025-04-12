@@ -15,9 +15,6 @@ class Suffusion_Flickr extends WP_Widget {
 		parent::__construct("suf-flickr", __("Flickr", "suffusion"), $widget_ops, $control_ops);
 	}
 	
-	function Suffusion_Flickr() {
-		self::__construct();		
-	}
 	function widget($args, $instance) {
 		extract($args);
 		$number = $instance['number'];

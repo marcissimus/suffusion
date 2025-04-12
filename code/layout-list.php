@@ -12,7 +12,9 @@ global $post, $page_title, $wp_query, $suf_excerpt_list_count, $suf_cat_info_ena
 
 $context = $suffusion->get_context();
 $suffusion_list_layout = true;
-if (!isset($suffusion_duplicate_posts)) $suffusion_duplicate_posts = array();
+if (!isset($suffusion_duplicate_posts)) {
+	$suffusion_duplicate_posts = [];
+}
 
 $page_title = get_bloginfo('name');
 if (have_posts()) {
@@ -30,7 +32,7 @@ if (isset($suffusion_cpt_post_id)) {
 	$hide_title = suffusion_get_post_meta($suffusion_cpt_post_id, 'suf_hide_page_title', true);
 }
 
-if ($suf_excerpt_list_count == 'all' && !$page_of_posts) {
+if ($suf_excerpt_list_count === 'all' && !$page_of_posts) {
 	$query_args = $wp_query->query;
 	$query_args['posts_per_page'] = -1;
 	$wp_query = new WP_Query($query_args);
@@ -87,17 +89,17 @@ if (have_posts()) {
 
 	$class = "";
 	$information = "";
-	if (in_array('category', $context)) {
-		$information = $suf_cat_info_enabled == 'enabled' ? suffusion_get_category_information() : false;
+	if (in_array('category', $context, true)) {
+		$information = $suf_cat_info_enabled === 'enabled' ? suffusion_get_category_information() : false;
 		$class = 'info-category';
 	}
-	else if (in_array('author', $context)) {
-		$information = $suf_author_info_enabled == 'enabled' ? suffusion_get_author_information() : false;
+	else if (in_array('author', $context, true)) {
+		$information = $suf_author_info_enabled === 'enabled' ? suffusion_get_author_information() : false;
 		$class = 'author-profile';
 	}
-	else if (in_array('tag', $context)) {
+	else if (in_array('tag', $context, true)) {
 		$tag_id = get_query_var('tag_id');
-		$information = $suf_tag_info_enabled == 'enabled' ? tag_description($tag_id) : false;
+		$information = $suf_tag_info_enabled === 'enabled' ? tag_description($tag_id) : false;
 		$class = 'info-tag';
 	}
 

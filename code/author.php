@@ -18,14 +18,14 @@ suffusion_query_posts();
 <?php suffusion_before_begin_content(); ?>
       <div id="content" class="hfeed">
 <?php
-if ($suf_author_excerpt == 'list') {
+if ($suf_author_excerpt === 'list') {
 	get_template_part('layouts/layout-list');
 }
-else if ($suf_author_excerpt == 'tiles') {
+elseif ($suf_author_excerpt === 'tiles') {
 	suffusion_after_begin_content();
 	get_template_part('layouts/layout-tiles');
 }
-else if ($suf_author_excerpt == 'mosaic') {
+elseif ($suf_author_excerpt === 'mosaic') {
 	get_template_part('layouts/layout-mosaic');
 }
 else {

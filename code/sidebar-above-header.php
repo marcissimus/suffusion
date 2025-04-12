@@ -14,11 +14,9 @@ if (!$display) {
 if (!suffusion_is_sidebar_empty(11)) {
 ?>
 	<!-- #widgets-above-header -->
-	<div id="widgets-above-header" class='warea fix'>
-		<div class='col-control'>
-<?php
-	dynamic_sidebar('Widgets Above Header');
-?>
+	<div id="widgets-above-header" class="warea fix">
+		<div class="col-control">
+			<?php dynamic_sidebar('Widgets Above Header'); ?>
 		</div>
 	</div>
 	<!-- /#widgets-above-header -->

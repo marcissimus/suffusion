@@ -32,7 +32,7 @@ if( can_now_reading_admin() ) {
 
 			<div class="booklisting">
 <?php
-$nr_book_query = "status=all&num=-1&search={$GLOBALS['query']}";
+$nr_book_query = "status=all&num=-1&search=" . $GLOBALS['query'];
 get_template_part('now-reading/nr-shelf');
 ?>
 			</div> <!-- /.booklisting -->

@@ -12,7 +12,7 @@ global $post, $page_title, $wp_query, $suf_excerpt_list_count, $suf_cat_info_ena
 
 $context = $suffusion->get_context();
 $suffusion_list_layout = true;
-if (!isset($suffusion_duplicate_posts)) $suffusion_duplicate_posts = array();
+$suffusion_duplicate_posts = $suffusion_duplicate_posts ?? [];
 
 $page_title = get_bloginfo('name');
 if (have_posts()) {
@@ -57,7 +57,7 @@ if (have_posts()) {
 			break;
 		}
 		the_post();
-		if (in_array($post->ID, $suffusion_duplicate_posts)) {
+		if (in_array($post->ID, $suffusion_duplicate_posts, true)) {
 			$suffusion_current_post_index--;
 			continue;
 		}
@@ -87,17 +87,17 @@ if (have_posts()) {
 
 	$class = "";
 	$information = "";
-	if (in_array('category', $context)) {
-		$information = $suf_cat_info_enabled == 'enabled' ? suffusion_get_category_information() : false;
+	if (in_array('category', $context, true)) {
+		$information = $suf_cat_info_enabled === 'enabled' ? suffusion_get_category_information() : false;
 		$class = 'info-category';
 	}
-	else if (in_array('author', $context)) {
-		$information = $suf_author_info_enabled == 'enabled' ? suffusion_get_author_information() : false;
+	else if (in_array('author', $context, true)) {
+		$information = $suf_author_info_enabled === 'enabled' ? suffusion_get_author_information() : false;
 		$class = 'author-profile';
 	}
-	else if (in_array('tag', $context)) {
+	else if (in_array('tag', $context, true)) {
 		$tag_id = get_query_var('tag_id');
-		$information = $suf_tag_info_enabled == 'enabled' ? tag_description($tag_id) : false;
+		$information = $suf_tag_info_enabled === 'enabled' ? tag_description($tag_id) : false;
 		$class = 'info-tag';
 	}
 
@@ -128,7 +128,7 @@ if (have_posts()) {
 		echo "<$suf_excerpt_list_style>\n";
 		while (have_posts()) {
 			the_post();
-			if (in_array($post->ID, $suffusion_duplicate_posts)) {
+			if (in_array($post->ID, $suffusion_duplicate_posts, true)) {
 				continue;
 			}
 			echo "<li>";
@@ -142,7 +142,7 @@ if (have_posts()) {
 <?php
 	}
 
-	if ($suf_excerpt_list_count != 'all') {
+	if ($suf_excerpt_list_count !== 'all') {
 		suffusion_before_end_content();
 	}
 }

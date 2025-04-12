@@ -17,12 +17,12 @@ suffusion_before_begin_content();
 	<div id="content">
 
 <?php
-global $post;
+$post = $GLOBALS['post'] ?? null;
 if (have_posts()) {
 	while (have_posts()) {
 		the_post();
 		$original_post = $post;
-		do_action('suffusion_before_post', $post->ID, 'blog', 1);
+		do_action('suffusion_before_post', get_the_ID(), 'blog', 1);
 ?>
 		<article <?php post_class(); ?> id="post-<?php the_ID(); ?>">
 			<?php suffusion_after_begin_post(); ?>
@@ -32,7 +32,7 @@ if (have_posts()) {
 				</div><!--/entry -->
 			<?php
 				// Due to the inclusion of Ad Hoc Widgets the global variable $post might have got changed. We will reset it to the original value.
-				$post = $original_post;
+				$GLOBALS['post'] = $original_post;
 				suffusion_after_content();
 			?>
 			</div><!-- .entry-container -->
@@ -42,7 +42,7 @@ if (have_posts()) {
 	</article><!--/post -->
 
 <?php
-		do_action('suffusion_after_post', $post->ID, 'blog', 1);
+		do_action('suffusion_after_post', get_the_ID(), 'blog', 1);
 	}
 }
 ?>

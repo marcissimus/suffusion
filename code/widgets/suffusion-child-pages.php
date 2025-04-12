@@ -8,7 +8,10 @@
  */
 
 class Suffusion_Child_Pages extends WP_Widget {
-	var $post_counts, $comment_counts, $post_excerpt_length;
+	private $post_counts;
+	private $comment_counts;
+	private $post_excerpt_length;
+
 	function __construct() {
 		$widget_ops = array('classname' => 'widget-suf-child-pages',
 			'description' => __("A widget for displaying child pages of a given page.", "suffusion"));
@@ -16,10 +19,7 @@ class Suffusion_Child_Pages extends WP_Widget {
 		$control_ops = array('width' => 650);
 		parent::__construct("suf-child-pages", __("Child Pages", "suffusion"), $widget_ops, $control_ops);
 	}
-	function Suffusion_Child_Pages() {
-		self::__construct();		
-	}
-	
+
 	function widget($args, $instance) {
 		if (!is_page()) {
 			return;
@@ -108,7 +108,7 @@ class Suffusion_Child_Pages extends WP_Widget {
 					echo "<li class='fix'><div class='suf-widget-thumb'>".$image."</div><a href='".get_permalink($page->ID)."' class='suf-widget-thumb-title'>".apply_filters('the_title', $page->post_title, $page->ID)."</a></li>\n";
 				}
 				else if ($post_style == 'thumbnail-excerpt') {
-					add_filter('excerpt_length', array(&$this, 'excerpt_length'));
+					add_filter('excerpt_length', array($this, 'excerpt_length'));
 					$image = suffusion_get_image(array('widget-thumb' => 'widget-'.$post_thumbnail_size));
 					echo "<li class='fix'><div class='suf-widget-thumb'>".$image."</div><a href='".get_permalink($page->ID)."' class='suf-widget-thumb-title'>".apply_filters('the_title', $page->post_title, $page->ID)."</a>".suffusion_excerpt(false, false, false)."</li>\n";
 				}

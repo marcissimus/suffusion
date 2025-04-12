@@ -9,14 +9,11 @@
 if (!class_exists('Suffusion_Widgets')) {
 	class Suffusion_Widgets {
 		function __construct() {
-		}
-		
-		function Suffusion_Widgets() {
-			self::__construct();		
+			$this->init();
 		}
 
 		function init() {
-			add_action("widgets_init", array(&$this, "load_widgets"));
+			add_action("widgets_init", array($this, "load_widgets"));
 		}
 
 		function load_widgets() {
@@ -72,6 +69,30 @@ if (!class_exists('Suffusion_Widgets')) {
 				include_once ($template_path . '/widgets/suffusion-child-pages.php');
 				register_widget("Suffusion_Child_Pages");
 			}
+		}
+	}
+
+	class Suffusion_Widget extends WP_Widget {
+		function __construct() {
+			parent::__construct(
+				'suffusion_widget',
+				__('Suffusion Widget', 'suffusion'),
+				array(
+					'description' => __('A basic Suffusion widget', 'suffusion'),
+				)
+			);
+		}
+	}
+
+	class Suffusion_Category_Widget extends WP_Widget {
+		function __construct() {
+			parent::__construct(
+				'suffusion_category', 
+				__('Suffusion Category', 'suffusion'),
+				array(
+					'description' => __('Display categories with additional formatting options', 'suffusion'),
+				)
+			);
 		}
 	}
 }

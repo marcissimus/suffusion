@@ -1,8 +1,9 @@
 <?php
 class Suffusion_CSS_Generator {
-	var $creation_date;
-	var $helper; 
-	function __construct($date = null) {
+	private $creation_date;
+	private $helper;
+
+	public function __construct(?string $date = null) {
 		if (is_null($date)) {
 			$this->creation_date = date(get_option('date_format'));
 		}
@@ -12,7 +13,7 @@ class Suffusion_CSS_Generator {
 		$this->helper = new Suffusion_CSS_Helper();
 	}
 
-	function get_creation_date() {
+	public function get_creation_date(): string {
 		return $this->creation_date;
 	}
 

@@ -30,7 +30,7 @@ if (have_posts()) {
 					<?php suffusion_content(); ?>
 				</div><!--/entry -->
 			<?php
-				// Due to the inclusion of Ad Hoc Widgets the global variable $post might have got changed. We will reset it to the original value.
+				// Reset $post to original value after widget processing
 				$post = $original_post;
 				suffusion_after_content();
 			?>

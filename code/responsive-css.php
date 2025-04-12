@@ -1,6 +1,7 @@
 <?php
 function suffusion_get_responsive_widths_css() {
-	global $suf_responsive_stops, $suf_responsive_nav_switch, $suf_responsive_thumb_switch, $suf_responsive_pullout_switch, $suf_responsive_scale_header, $suf_responsive_headline_box_switch;
+	global $suf_responsive_stops, $suf_responsive_nav_switch, $suf_responsive_thumb_switch, $suf_responsive_pullout_switch, $suf_responsive_scale_header, $suf_responsive_headline_box_switch,
+	       $suf_sidebar_count, $suf_sidebar_alignment, $suf_sidebar_2_alignment;
 	$stops = explode(',', $suf_responsive_stops);
 
 	$ret = '';
@@ -45,8 +46,8 @@ function suffusion_get_responsive_widths_css() {
 	foreach ($stops as $stop) {
 		$n_stop = rtrim($stop, 'px');
 		$sb = 'suf_responsive_'.$n_stop.'_sb';
-		global $$sb;
-		$sb = $$sb;
+		$sb_value = $GLOBALS[$sb] ?? null;
+
 		$ret .= "@media screen and (max-width: $stop) {";
 		if ($n_stop <= $nav_switch) {
 			$ret .= $responsive_nav;
@@ -74,18 +75,17 @@ function suffusion_get_responsive_widths_css() {
 //		$ret .=	"\t".suffusion_all_templates_selector('#nav-top')." { width: 100%; max-width: none; min-width: 0; }\n";
 		$ret .=	"\t".suffusion_all_templates_selector('#nav-top, #nav .col-control')." {	width: 100%; max-width: none; min-width: 0; }\n";
 
-		if ($sb == 'kill') {
+		if ($sb_value == 'kill') {
 			$ret .= "\t".suffusion_all_templates_selector('#sidebar-shell-1')." { display: none; }\n";
 			$ret .= "\t".suffusion_all_templates_selector('#sidebar-shell-2')." { display: none; }\n";
 		}
-		else if ($sb == 'below') {
+		else if ($sb_value == 'below') {
 			$ret .= "\t".suffusion_all_templates_selector('#sidebar-shell-1')." { margin-right: auto; margin-left: auto; width: 100%; left: auto; right: auto; }\n";
 			$ret .= "\t".suffusion_all_templates_selector('#sidebar').", ".suffusion_all_templates_selector('#sidebar-b')." { width: 100%; }\n";
 			$ret .= "\t".suffusion_all_templates_selector('#sidebar-shell-2')." { margin-right: auto; margin-left: auto; width: 100%; left: auto; right: auto; }\n";
 			$ret .= "\t".suffusion_all_templates_selector('#sidebar-2').", ".suffusion_all_templates_selector('#sidebar-2-b')." { width: 100%; }\n";
 		}
-		else if ($sb == 'below-beside') {
-			global $suf_sidebar_count, $suf_sidebar_alignment, $suf_sidebar_2_alignment;
+		else if ($sb_value == 'below-beside') {
 			if (2 == $suf_sidebar_count && $suf_sidebar_alignment === $suf_sidebar_2_alignment) {
 				$ret .= "\t#sidebar-wrap { margin-right: auto; margin-left: auto; width: 100%; left: auto; right: auto; }\n";
 				$ret .= "\t.sidebar-wrap-$suf_sidebar_alignment #sidebar-shell-1 {width: 49%; margin-right: auto; margin-left: auto;left: auto; right: auto; float: $suf_sidebar_alignment;}\n";
@@ -135,7 +135,7 @@ function suffusion_get_responsive_widths_css() {
 			$ret .= "\t".suffusion_all_templates_selector('#wsidebar-bottom')." { width: 100%; }\n";
 		}
 
-		if ($sb != 'in-position') {
+		if ($sb_value != 'in-position') {
 			$ret .= "\t".suffusion_all_templates_selector('#container')." { padding-left: 0; padding-right: 0; }";
 		}
 		$ret .=
@@ -148,9 +148,8 @@ function suffusion_get_responsive_widths_css() {
 	}\n";
 
 		$columns_opt = 'suf_responsive_'.$n_stop.'_columns';
-		global $$columns_opt;
-		$columns_opt = $$columns_opt;
-		$column_counts = suffusion_get_associative_array($columns_opt);
+		$columns_opt_value = $GLOBALS[$columns_opt] ?? null;
+		$column_counts = suffusion_get_associative_array($columns_opt_value);
 		$width_map = array(
 			1 => '100%',
 			2 => '49%',
@@ -191,22 +190,15 @@ function suffusion_get_responsive_widths_css() {
 		);
 
 		foreach ($children_map as $area => $split_array) {
+			$columns = 1;
 			if (isset($column_counts[$area])) {
-				$columns = $column_counts[$area];
-				if (isset($columns['columns']) && !empty($columns['columns'])) {
-					$columns = $columns['columns'];
-				}
-				else {
-					$columns = 1;
-				}
-			}
-			else {
-				$columns = 1;
+				$area_columns = $column_counts[$area];
+				$columns = $area_columns['columns'] ?? 1;
 			}
 
 			$splits = explode(';', $split_array);
-			$width = $width_map[$columns];
-			$margin = '5px '.$margin_map[$columns];
+			$width = $width_map[$columns] ?? '100%';
+			$margin = '5px '.($margin_map[$columns] ?? '0');
 
 			if ($area == 'suf-mag-excerpts' || $area == 'suf-mag-categories' || $area == 'suf-tiles') {
 				$tile_containers = array();
@@ -237,12 +229,7 @@ function suffusion_get_responsive_widths_css() {
 
 		if (isset($column_counts['mega-menus'])) {
 			$columns = $column_counts['mega-menus'];
-			if (isset($columns['columns']) && !empty($columns['columns'])) {
-				$mm_columns = $columns['columns'];
-			}
-			else {
-				$mm_columns = 1;
-			}
+			$mm_columns = $columns['columns'] ?? 1;
 			$max_width = $mm_columns * 180;
 			$ret .= ".mm-warea { max-width: {$max_width}px; }\n";
 			$ret .= ".mm-row-equal, .mm-original, .mm-mason { text-align: justify; -ms-text-justify: distribute; text-justify: distribute; }\n";

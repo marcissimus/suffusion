@@ -18,14 +18,14 @@ suffusion_before_begin_content();
 ?>
       <div id="content" class="hfeed">
 <?php
-if ($suf_category_excerpt == 'list') {
+if ($suf_category_excerpt === 'list') {
 	get_template_part('layouts/layout-list');
 }
-else if ($suf_category_excerpt == 'tiles') {
+elseif ($suf_category_excerpt === 'tiles') {
 	suffusion_after_begin_content();
 	get_template_part('layouts/layout-tiles');
 }
-else if ($suf_category_excerpt == 'mosaic') {
+elseif ($suf_category_excerpt === 'mosaic') {
 	//suffusion_after_begin_content();
 	get_template_part('layouts/layout-mosaic');
 }

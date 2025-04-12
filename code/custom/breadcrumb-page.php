@@ -30,25 +30,25 @@ if (!is_front_page() && !is_home() && is_page()) {
 
 		$exclusion_list = suffusion_get_excluded_pages("suf_nav_pages");
 		for ($anc_index = 1; $num_ancestors - $anc_index >= 0; $anc_index++) {
-			$style = ($anc_index == 1) ? "subnav" : "l".($anc_index + 1)."nav";
+			$style = ($anc_index == 1) ? "subnav" : "l" . ($anc_index + 1) . "nav";
 			$class = ($anc_index == 1) ? "" : "hier-nav";
 ?>
-	<div id="<?php echo $style;?>" class="<?php echo $class; ?> fix">
+	<div id="<?php echo esc_attr($style); ?>" class="<?php echo esc_attr($class); ?> fix">
 		<ul>
 			<?php suffusion_get_siblings_in_nav($ancestors, $num_ancestors - $anc_index, $exclusion_list, $suf_nav_exclude_in_breadcrumb); ?>
 		</ul>
-	</div><?php echo "<!-- /".$style."-->"; ?>
+	</div><?php echo "<!-- /" . esc_html($style) . "-->"; ?>
 <?php
 		}
-		$exclusion_query = $suf_nav_exclude_in_breadcrumb == "hide" ? "&exclude_tree=".$exclusion_list : "";
-		$style = ($num_ancestors == 0) ? "subnav" : "l".($num_ancestors + 2)."nav";
+		$exclusion_query = $suf_nav_exclude_in_breadcrumb == "hide" ? "&exclude_tree=" . $exclusion_list : "";
+		$style = ($num_ancestors == 0) ? "subnav" : "l" . ($num_ancestors + 2) . "nav";
 		$class = ($num_ancestors == 0) ? "" : "hier-nav";
-		$children = wp_list_pages("title_li=&child_of=".$post->ID."&echo=0".$exclusion_query);
+		$children = wp_list_pages("title_li=&child_of=" . $post->ID . "&echo=0" . $exclusion_query);
 		if ($children) {
 	?>
-	<div id="<?php echo $style;?>" class="<?php echo $class; ?> fix">
+	<div id="<?php echo esc_attr($style); ?>" class="<?php echo esc_attr($class); ?> fix">
 		<ul>
-			<?php echo $children; ?>
+			<?php echo wp_kses_post($children); ?>
 		</ul>
 	</div><!-- /sub nav -->
 <?php
@@ -61,19 +61,19 @@ if (!is_front_page() && !is_home() && is_page()) {
 		}
 
 		$show_home = explode(',', $suf_show_home_in);
-		if ($num_ancestors > 0 || in_array('page', $show_home)) {
+		if ($num_ancestors > 0 || in_array('page', $show_home, true)) {
 	?>
 	<div id="subnav" class="fix">
 		<div class="breadcrumb">
 	<?php
-			if (in_array('page', $show_home)) {
-				echo "<a href='".home_url()."'>".__('Home', 'suffusion')."</a> ".$suf_breadcrumb_separator." ";
+			if (in_array('page', $show_home, true)) {
+				echo '<a href="' . esc_url(home_url()) . '">' . esc_html__('Home', 'suffusion') . '</a> ' . esc_html($suf_breadcrumb_separator) . ' ';
 			}
-			for ($i = $num_ancestors-1; $i>=0; $i--) {
+			for ($i = $num_ancestors-1; $i >= 0; $i--) {
 				$anc_page = get_page($ancestors[$i]);
-				echo "<a href='".get_permalink($ancestors[$i])."'>".$anc_page->post_title."</a> ".$suf_breadcrumb_separator." ";
+				echo '<a href="' . esc_url(get_permalink($ancestors[$i])) . '">' . esc_html($anc_page->post_title) . '</a> ' . esc_html($suf_breadcrumb_separator) . ' ';
 			}
-			echo get_the_title();
+			echo esc_html(get_the_title());
 	?>
 		</div>
 	</div><!-- /sub nav -->

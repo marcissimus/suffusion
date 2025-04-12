@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 global $suffusion_help_texts;
 $suffusion_help_texts = array(
 	"skinning" => array("name" => "Skinning",

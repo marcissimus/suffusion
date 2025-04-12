@@ -15,7 +15,7 @@ $suffusion_mosaic_layout = true;
 remove_action('suffusion_before_end_content', 'suffusion_pagination');
 add_action('suffusion_before_end_content', 'suffusion_mosaic_pagination');
 
-if (!isset($suffusion_duplicate_posts)) $suffusion_duplicate_posts = array();
+$suffusion_duplicate_posts = $suffusion_duplicate_posts ?? [];
 
 $page_title = get_bloginfo('name');
 if (have_posts()) {
@@ -42,7 +42,7 @@ if (have_posts()) {
 	$suffusion_current_post_index = 0;
 	$suffusion_full_post_count_for_view = suffusion_get_full_content_count();
 
-	$custom_classes = array();
+	$custom_classes = [];
 	if (isset($suffusion_cpt_post_id)) {
 		add_action('suffusion_add_taxonomy_bylines_line', 'suffusion_cpt_line_taxonomies', 10, 2);
 		add_action('suffusion_add_taxonomy_bylines_pullout', 'suffusion_cpt_line_taxonomies', 10, 4);
@@ -63,7 +63,7 @@ if (have_posts()) {
 			break;
 		}
 		the_post();
-		if (in_array($post->ID, $suffusion_duplicate_posts)) {
+		if (in_array($post->ID, $suffusion_duplicate_posts, true)) {
 			$suffusion_current_post_index--;
 			continue;
 		}
@@ -91,17 +91,17 @@ if (have_posts()) {
 
 	$class = "";
 	$information = "";
-	if (in_array('category', $context)) {
-		$information = $suf_cat_info_enabled == 'enabled' ? suffusion_get_category_information() : false;
+	if (in_array('category', $context, true)) {
+		$information = $suf_cat_info_enabled === 'enabled' ? suffusion_get_category_information() : false;
 		$class = 'info-category';
 	}
-	else if (in_array('author', $context)) {
-		$information = $suf_author_info_enabled == 'enabled' ? suffusion_get_author_information() : false;
+	else if (in_array('author', $context, true)) {
+		$information = $suf_author_info_enabled === 'enabled' ? suffusion_get_author_information() : false;
 		$class = 'author-profile';
 	}
-	else if (in_array('tag', $context)) {
+	else if (in_array('tag', $context, true)) {
 		$tag_id = get_query_var('tag_id');
-		$information = $suf_tag_info_enabled == 'enabled' ? tag_description($tag_id) : false;
+		$information = $suf_tag_info_enabled === 'enabled' ? tag_description($tag_id) : false;
 		$class = 'info-tag';
 	}
 
@@ -134,7 +134,7 @@ if (have_posts()) {
 			$cpt_posts_per_row = suffusion_get_post_meta($suffusion_cpt_post_id, 'suf_cpt_posts_per_row', true);
 			$col_class = 'suf-gallery-'.$cpt_posts_per_row.'c';
 		}
-		else if (isset($suf_mosaic_constrain_row) && isset($suf_mosaic_constrain_by_count) && $suf_mosaic_constrain_row == 'count') {
+		else if (isset($suf_mosaic_constrain_row) && isset($suf_mosaic_constrain_by_count) && $suf_mosaic_constrain_row === 'count') {
 			$col_class = 'suf-gallery-'.$suf_mosaic_constrain_by_count.'c';
 		}
 
@@ -143,7 +143,7 @@ if (have_posts()) {
 		echo "<div class='suf-mosaic-thumbs fix'>";
 		while (have_posts()) {
 			the_post();
-			if (in_array($post->ID, $suffusion_duplicate_posts)) {
+			if (in_array($post->ID, $suffusion_duplicate_posts, true)) {
 				continue;
 			}
 

@@ -13,11 +13,15 @@ if (function_exists('icl_t')) {
 		 * Some strings are set interactively in the admin screens of Suffusion. If you have WPML installed, then there may be translations of such strings.
 		 * This code ensures that such translations are picked up, then the unified options array is rewritten so that subsequent calls can pick it up.
 		 */
-		if (function_exists('icl_t') && in_array($id, $suffusion_translatable_fields) && isset($suffusion_interactive_text_fields[$id])) {
-			$value = wpml_t('suffusion-interactive', $suffusion_interactive_text_fields[$id]."|".$id, $value);
+		if (in_array($id, $suffusion_translatable_fields, true) && 
+			isset($suffusion_interactive_text_fields[$id])) {
+			$value = wpml_t(
+				'suffusion-interactive', 
+				$suffusion_interactive_text_fields[$id]."|".$id, 
+				$value
+			);
 		}
-		global $$id;
-		$$id = $value;
+		$GLOBALS[$id] = $value;
 		$suffusion_unified_options[$id] = $value;
 	}
 }

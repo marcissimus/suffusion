@@ -27,22 +27,35 @@ else {
 	$is_cpt = false;
 }
 
-$meta_position = 'suf_post_' . $format . 'meta_position';
-$show_cats = 'suf_post_' . $format . 'show_cats';
-$show_tags = 'suf_post_' . $format . 'show_tags';
-$show_posted_by = (!isset($suffusion_cpt_post_id) && !$is_cpt) ? 'suf_post_' . $format . 'show_posted_by' : 'suf_cpt_bylines_posted_by';
-$show_comment = (!isset($suffusion_cpt_post_id) && !$is_cpt) ? 'suf_post_' . $format . 'show_comment' : 'suf_cpt_bylines_comments';
-$show_perm = (!isset($suffusion_cpt_post_id) && !$is_cpt) ? 'suf_post_' . $format . 'show_perm' : 'suf_cpt_bylines_permalinks';
-$with_title_show_perm = 'suf_post_' . $format . 'with_title_show_perm';
+// Define meta variable names
+$meta_keys = [
+    'meta_position' => 'suf_post_' . $format . 'meta_position',
+    'show_cats' => 'suf_post_' . $format . 'show_cats',
+    'show_tags' => 'suf_post_' . $format . 'show_tags',
+    'show_posted_by' => (!isset($suffusion_cpt_post_id) && !$is_cpt) ? 'suf_post_' . $format . 'show_posted_by' : 'suf_cpt_bylines_posted_by',
+    'show_comment' => (!isset($suffusion_cpt_post_id) && !$is_cpt) ? 'suf_post_' . $format . 'show_comment' : 'suf_cpt_bylines_comments',
+    'show_perm' => (!isset($suffusion_cpt_post_id) && !$is_cpt) ? 'suf_post_' . $format . 'show_perm' : 'suf_cpt_bylines_permalinks',
+    'with_title_show_perm' => 'suf_post_' . $format . 'with_title_show_perm'
+];
 
-global $$meta_position, $$show_cats, $$show_posted_by, $$show_tags, $$show_comment, $$show_perm, $$with_title_show_perm;
-$post_meta_position = apply_filters('suffusion_byline_position', $$meta_position);
-$post_show_cats = $$show_cats;
-$post_show_posted_by = $$show_posted_by;
-$post_show_tags = $$show_tags;
-$post_show_comment = $$show_comment;
-$post_show_perm = $$show_perm;
-$post_with_title_show_perm = $$with_title_show_perm;
+// Access globals using array keys
+$meta_vars = [
+    'meta_position' => $GLOBALS[$meta_keys['meta_position']] ?? '',
+    'show_cats' => $GLOBALS[$meta_keys['show_cats']] ?? '',
+    'show_posted_by' => $GLOBALS[$meta_keys['show_posted_by']] ?? '',
+    'show_tags' => $GLOBALS[$meta_keys['show_tags']] ?? '',
+    'show_comment' => $GLOBALS[$meta_keys['show_comment']] ?? '',
+    'show_perm' => $GLOBALS[$meta_keys['show_perm']] ?? '',
+    'with_title_show_perm' => $GLOBALS[$meta_keys['with_title_show_perm']] ?? ''
+];
+
+$post_meta_position = apply_filters('suffusion_byline_position', $meta_vars['meta_position']);
+$post_show_cats = $meta_vars['show_cats'];
+$post_show_posted_by = $meta_vars['show_posted_by'];
+$post_show_tags = $meta_vars['show_tags'];
+$post_show_comment = $meta_vars['show_comment'];
+$post_show_perm = $meta_vars['show_perm'];
+$post_with_title_show_perm = $meta_vars['with_title_show_perm'];
 $show_date = (!isset($suffusion_cpt_post_id) && !$is_cpt) ? ($suf_date_box_show != 'hide' || ($suf_date_box_show == 'hide-search' && !is_search())) : $suf_cpt_bylines_post_date;
 
 $post_meta_position = apply_filters('suffusion_pullout_position', $post_meta_position);

@@ -8,18 +8,15 @@
  */
 class Suffusion_Search extends WP_Widget {
 	function __construct() {
-		$widget_options = array(
+		$widget_ops = array(
 			"classname" => "search",
 			"description" => __("A search form for your blog", "suffusion"),
 		);
-		$control_options = array(
+		$control_ops = array(
 			"id_base" => "search"
 		);
-		parent::__construct("search", __("Search", "suffusion"), $widget_options, $control_options);
+		parent::__construct("search", __("Search", "suffusion"), $widget_ops, $control_ops);
 	}
-	function Suffusion_Search() {
-			self::__construct();		
-	}	
 
 	function widget($args, $instance) {
 		extract($args);

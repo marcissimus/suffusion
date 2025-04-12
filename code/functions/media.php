@@ -21,17 +21,21 @@ function suffusion_attachment($echo = true) {
 	$attachment = wp_get_attachment_link(0, 'full');
 
 	foreach ($mime_type as $type) {
-		$type = str_replace(array('.','-'), '_', $type);
+		$type = str_replace(['.', '-'], '_', $type);
 		if (function_exists("suffusion_{$type}_attachment")) {
 			$attachment = call_user_func("suffusion_{$type}_attachment", $attachment, $mime, $file);
 			$attachment = apply_filters('suffusion_attachment_html', $attachment);
-			if ($echo) echo $attachment;
+			if ($echo) {
+				echo $attachment;
+			}
 			return $attachment;
 		}
 	}
 	$mime_type_class = suffusion_get_mime_type_class();
 	$attachment = "<div class='$mime_type_class'>$attachment</div>";
-	if ($echo) echo $attachment;
+	if ($echo) {
+		echo $attachment;
+	}
 	return $attachment;
 }
 
@@ -48,12 +52,11 @@ function suffusion_get_mime_type_class($mime = '') {
 	}
 
 	$raw_mime_type = explode('/', $mime);
-	$mime_type = array();
-	foreach ($raw_mime_type as $mime_type_component) {
-		$mime_type[] = str_replace(array('.', '_'), '-', $mime_type_component);
-	}
-	$mime_type_class = implode(' ', $mime_type);
-	return $mime_type_class;
+	$mime_type = array_map(function($mime_type_component) {
+		return str_replace(['.', '_'], '-', $mime_type_component);
+	}, $raw_mime_type);
+	
+	return implode(' ', $mime_type);
 }
 
 /**
@@ -67,11 +70,11 @@ function suffusion_get_mime_type_class($mime = '') {
 function suffusion_image_attachment($attachment = '', $mime = '', $file = '') {
 	global $suf_image_show_exif, $suf_image_show_sizes;
 	$display = apply_filters('suffusion_can_display_attachment', 'link', 'image');
-	if ($display == false) {
-		return "";
+	if ($display === false) {
+		return '';
 	}
 
-	$ret = "";
+	$ret = '';
 	if ($suf_image_show_sizes == 'show') {
 		$ret = suffusion_get_image_size_links();
 	}
@@ -331,21 +334,19 @@ function suffusion_resize($img_url, $width, $height, $crop = false, $quality = n
 	}
 
 	$file_path = parse_url($img_url);
-	if ($_SERVER['HTTP_HOST'] != $file_path['host'] && $file_path['host'] != '') {  // The image is not locally hosted
+	$external_file = false;
+	
+	if ($_SERVER['HTTP_HOST'] !== ($file_path['host'] ?? '') && ($file_path['host'] ?? '') !== '') {
 		$external_file = true;
-		$remote_file_info = pathinfo($file_path['path']);// Can't use $img_url as the parameter because pathinfo includes the 'query' for the URL
-		if (isset($remote_file_info['extension'])) {
-			$remote_file_extension = $remote_file_info['extension'];
-		}
-		else {
-			$remote_file_extension = 'jpg';
-		}
-		$remote_file_extension = strtolower($remote_file_extension);	// Not doing this creates multiple copies of a remote image.
+		$remote_file_info = pathinfo($file_path['path']);
+		$remote_file_extension = $remote_file_info['extension'] ?? 'jpg';
+		$remote_file_extension = strtolower($remote_file_extension);
 
 		$file_base = md5($img_url).'.'.$remote_file_extension;
 
 		// We will try to copy the file over locally. Otherwise WP's native image_resize() breaks down.
 		$copy_to_file = $upload_dir['path'].'/'.$file_base;
+		
 		if (!file_exists($copy_to_file)) {
 			$unique_filename = wp_unique_filename($upload_dir['path'], $file_base);
 			// Using the HTTP API instead of our own CURL calls...
@@ -362,7 +363,6 @@ function suffusion_resize($img_url, $width, $height, $crop = false, $quality = n
 		$file_path = $copy_to_file;
 	}
 	else {  // Locally hosted image
-		$external_file = false;
 		$file_path = suffusion_get_document_root($file_path['path']).$file_path['path'];
 	}
 

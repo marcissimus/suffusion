@@ -17,7 +17,7 @@ get_header();
 	    <header class="post-header">
 		    <h2 class="posttitle">
 <?php
-if (trim($suf_404_title) == '') {
+if (trim($suf_404_title) === '') {
 	echo $suffusion_404_title;
 }
 else {
@@ -32,7 +32,7 @@ else {
 		<div class="entry">
 		<p>
 <?php
-if (trim($suf_404_content) == '') {
+if (trim($suf_404_content) === '') {
 	echo $suffusion_404_content;
 }
 else {

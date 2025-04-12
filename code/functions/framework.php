@@ -8,10 +8,10 @@
  */
 class Suffusion_Framework {
 	function __construct() {
-		add_action('after_setup_theme', array(&$this, 'globals'), 1);
-		add_action('after_setup_theme', array(&$this, 'template'), 5);
-		add_action('wp_head', array(&$this, 'specific'), 6);
-		add_action('wp_loaded', array(&$this, 'admin'));
+		add_action('after_setup_theme', array($this, 'globals'), 1);
+		add_action('after_setup_theme', array($this, 'template'), 5);
+		add_action('wp_head', array($this, 'specific'), 6);
+		add_action('wp_loaded', array($this, 'admin'));
 	}
 
 	/**
@@ -181,7 +181,7 @@ class Suffusion_Framework {
 		$suffusion_options_custom_types_page = 'theme-options-custom-types.php';
 
 		//WP provides a global $is_IE, but we specifically need to find IE6x (or, heaven forbid, IE5x). Note that older versions of Opera used to identify themselves as IE6, so we exclude Opera.
-		if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+		if (isset($_SERVER['HTTP_USER_AGENT'])) {
 			$suffusion_is_ie6 = preg_match('/\bmsie [56]/i', $_SERVER['HTTP_USER_AGENT']) && !preg_match('/\bopera/i', $_SERVER['HTTP_USER_AGENT']);
 		}
 		else {
@@ -198,9 +198,9 @@ class Suffusion_Framework {
 		if (is_admin()) { // The following don't need to be loaded for non-admin screens
 			$template_path = get_template_directory();
 
-			require_once ($template_path . "/functions/admin.php");
-			require_once ($template_path . "/admin/suffusion-options-page.php");
-			require_once ($template_path.'/admin/theme-options-renderer.php');
+			require_once ($template_path . '/functions/admin.php');
+			require_once ($template_path . '/admin/suffusion-options-page.php');
+			require_once ($template_path . '/admin/theme-options-renderer.php');
 
 			require_if_theme_supports('mega-menus', $template_path.'/library/suffusion-admin-walkers.php');
 		}
@@ -212,12 +212,13 @@ class Suffusion_Framework {
 	function template() {
 		if (!is_admin()) {
 			$template_path = get_template_directory();
-			require_once ($template_path . "/functions/template.php");
-			require_once ($template_path . "/functions/actions.php");
-			require_once ($template_path . "/functions/filters.php");
-			require_once ($template_path . "/functions/media.php");
-			require_once ($template_path . "/library/device.php");
+			require_once ($template_path . '/functions/template.php');
+			require_once ($template_path . '/functions/actions.php');
+			require_once ($template_path . '/functions/filters.php');
+			require_once ($template_path . '/functions/media.php');
+			require_once ($template_path . '/library/device.php');
 			suffusion_query_post_meta();
+
 		}
 	}
 
@@ -227,8 +228,9 @@ class Suffusion_Framework {
 	function specific() {
 		$template_path = get_template_directory();
 		if (is_page_template('magazine.php')) {
-			require_once ($template_path . "/functions/magazine-functions.php");
+			require_once ($template_path . '/functions/magazine-functions.php');
 		}
-		require_if_theme_supports('mega-menus', $template_path.'/library/suffusion-walkers.php');
+		require_if_theme_supports('mega-menus', $template_path . '/library/suffusion-walkers.php');
+
 	}
 }

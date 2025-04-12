@@ -11,8 +11,8 @@ class Suffusion_Customize_Image_Picker extends WP_Customize_Control {
 	public $type = 'suffusion-image';
 	private $footer_message = '';
 
-	public function __construct($manager, $id, $args = array()) {
-		$this->footer_message = isset($args['footer_message']) ? $args['footer_message'] : '';
+	public function __construct($manager, $id, $args = []) {
+		$this->footer_message = $args['footer_message'] ?? '';
 		parent::__construct($manager, $id, $args);
 	}
 
@@ -36,19 +36,17 @@ class Suffusion_Customize_Image_Picker extends WP_Customize_Control {
 	<div class='customize-suffusion-image-picker'>
 	<?php
 		foreach ($this->choices as $value => $image) {
+			$alt = '';
+			$title = '';
 			if (isset($image['alt'])) {
 				$alt = ' alt="'.esc_attr($image['alt']).'" ';
 				$title = "<span class='picker-title'>".esc_attr($image['alt'])."</span><br/>";
-			}
-			else {
-				$alt = '';
-				$title = '';
 			}
 			?>
 		<label class='customize-suffusion-picker-choice'>
 			<input type="radio" value="<?php echo esc_attr($value); ?>" name="<?php echo esc_attr($name); ?>" <?php $this->link(); checked($this->value(), $value); ?> class='customize-suffusion-picker-radio'/>
 			<div class='customize-suffusion-image-text'>
-				<img src="<?php echo $image['src']; ?>" <?php echo $alt;?> />
+				<img src="<?php echo esc_url($image['src']); ?>" <?php echo $alt;?> />
 				<?php echo $title; ?>
 			</div>
 		</label>
@@ -57,7 +55,7 @@ class Suffusion_Customize_Image_Picker extends WP_Customize_Control {
 		?>
 	</div>
 		<?php
-		echo $this->footer_message;
+		echo wp_kses_post($this->footer_message);
 	}
 }
 

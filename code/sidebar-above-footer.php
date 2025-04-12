@@ -11,14 +11,15 @@ $display = apply_filters('suffusion_can_display_widget_area_above_footer', true)
 if (!$display) {
 	return;
 }
-if ($suf_widget_area_above_footer_enabled == "enabled") {
+if ($suf_widget_area_above_footer_enabled === 'enabled') {
 	$suffusion_pseudo_template = suffusion_get_pseudo_template_class();
-	if ((is_page_template('no-sidebars.php') && $suf_ns_waaf_enabled == 'not-enabled') || (in_array('page-template-no-sidebars-php', $suffusion_pseudo_template) && $suf_ns_waaf_enabled == 'not-enabled')) {
+	if ((is_page_template('no-sidebars.php') && $suf_ns_waaf_enabled === 'not-enabled') || (in_array('page-template-no-sidebars-php', $suffusion_pseudo_template, true) && $suf_ns_waaf_enabled === 'not-enabled')) {
+		return;
 	}
 	else if (!suffusion_is_sidebar_empty(5)) {
 		?>
 	<!-- horizontal-outer-widgets-2 Widget Area -->
-	<div id="horizontal-outer-widgets-2" class="<?php echo $suf_wa_waaf_style; ?> warea fix">
+	<div id="horizontal-outer-widgets-2" class="<?php echo esc_attr($suf_wa_waaf_style); ?> warea fix">
 		<?php
 			dynamic_sidebar('Widget Area Above Footer');
 		?>

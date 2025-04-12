@@ -8,19 +8,16 @@
  */
 
 class Suffusion_Featured_Posts extends WP_Widget {
-	var $post_excerpt_length;
+	private int $post_excerpt_length;
 
-	function __construct() {
+	public function __construct() {
 		$widget_ops = array('classname' => 'widget-suf-featured-posts',
 			'description' => __("A widget for displaying featured posts.", "suffusion"));
 		$control_ops = array('width' => 750);
 		parent::__construct("suf-featured-posts", __("Featured Content", "suffusion"), $widget_ops, $control_ops);
 	}
 	
-	function Suffusion_Featured_Posts() {
-		self::__construct();		
-	}
-	function form($instance) {
+	function form($instance): void {
 		global $suf_excerpt_custom_length;
 		$defaults = array("title" => "",
             'show_sticky' => true,
@@ -57,8 +54,8 @@ class Suffusion_Featured_Posts extends WP_Widget {
             'next_text' => __('Next Post', 'suffusion'),
 		);
 		// remove null and empty string values
-		$instance = array_filter($instance, fn($value) => (!is_null($value) && $value !== ''));
-		$instance = wp_parse_args((array)$instance, $defaults);
+		$instance = array_filter((array)$instance, fn($value) => (!is_null($value) && $value !== ''));
+		$instance = wp_parse_args($instance, $defaults);
 ?>
 <div class="suf-widget-block">
 <?php
@@ -373,7 +370,7 @@ class Suffusion_Featured_Posts extends WP_Widget {
 <?php
 	}
 
-	function widget( $args, $instance ) {
+	public function widget($args, $instance): void {
 		global $suf_excerpt_custom_length;
 		extract($args);
 
@@ -482,7 +479,7 @@ class Suffusion_Featured_Posts extends WP_Widget {
 		echo $after_widget;
     }
 
-	function update($new_instance, $old_instance) {
+	public function update($new_instance, $old_instance): array {
 		$instance = $old_instance;
 		$instance['title'] = stripslashes(trim($new_instance['title']));
 		$instance['number_of_posts'] = $new_instance['number_of_posts'];
@@ -522,10 +519,13 @@ class Suffusion_Featured_Posts extends WP_Widget {
 		return $instance;
 	}
 
-	function get_widget_featured_content($widget_id, $number_of_posts, $show_sticky, $latest_posts, $number_of_latest_posts,
-	        $featured_categories, $featured_posts, $featured_pages, $excerpt_position, $text_display, $text_width, $text_bg_color, $text_color, $link_color,
-	        $featured_height, $custom_image_size,$custom_img_height, $custom_img_width, $show_index, $index_position, $index_style, $index_alignment, $show_controls, $controls_position, $controls_alignment, $prev_text, $pause_text, $next_text,
-	        $center_slides, $full_width) {
+	private function get_widget_featured_content(string $widget_id, int $number_of_posts, bool $show_sticky, bool $latest_posts, 
+		int $number_of_latest_posts, ?string $featured_categories, ?string $featured_posts, ?string $featured_pages, 
+		string $excerpt_position, string $text_display, string $text_width, string $text_bg_color, string $text_color, 
+		string $link_color, string $featured_height, bool $custom_image_size, string $custom_img_height, 
+		string $custom_img_width, bool $show_index, string $index_position, string $index_style, string $index_alignment, 
+		bool $show_controls, string $controls_position, string $controls_alignment, string $prev_text, string $pause_text, 
+		string $next_text, bool $center_slides, bool $full_width): string {
 		$featured_categories = str_replace(" ", "", $featured_categories);
 		$featured_posts = str_replace(" ", "", $featured_posts);
 		$featured_pages = str_replace(" ", "", $featured_pages);
@@ -627,9 +627,11 @@ class Suffusion_Featured_Posts extends WP_Widget {
         return $ret;
     }
 
-    function widget_parse_featured_query_results($query, &$do_not_duplicate, &$featured_excerpt_position, &$featured_post_counter,
-            $number_of_posts, $excerpt_position, &$position, $rotation, $alttb, $altlr, $text_display, $text_width, $text_bg_color, $text_color, $link_color,
-            $featured_height, $custom_image_size,$custom_img_height, $custom_img_width, $center_slides, $full_width) {
+    private function widget_parse_featured_query_results(WP_Query $query, array &$do_not_duplicate, 
+		int &$featured_excerpt_position, int &$featured_post_counter, int $number_of_posts, string $excerpt_position, 
+		string &$position, array $rotation, array $alttb, array $altlr, string $text_display, string $text_width, 
+		string $text_bg_color, string $text_color, string $link_color, string $featured_height, bool $custom_image_size,
+		string $custom_img_height, string $custom_img_width, bool $center_slides, bool $full_width): string {
         global $post;
         $ret = "";
         if (isset($query->posts) && is_array($query->posts)) {
@@ -662,8 +664,9 @@ class Suffusion_Featured_Posts extends WP_Widget {
         return $ret;
     }
 
-	function widget_display_single_featured_post($position, $text_display, $text_width, $text_bg_color, $text_color, $link_color,
-		$featured_height, $custom_image_size, $custom_img_height, $custom_img_width, $center_slides, $full_width) {
+	private function widget_display_single_featured_post(string $position, string $text_display, string $text_width, 
+		string $text_bg_color, string $text_color, string $link_color, string $featured_height, bool $custom_image_size, 
+		string $custom_img_height, string $custom_img_width, bool $center_slides, bool $full_width): string {
         global $post;
 		if ($center_slides == 'on') {
 			$center = 'center';
@@ -695,7 +698,7 @@ class Suffusion_Featured_Posts extends WP_Widget {
             $ret .= "</a>";
 			$ret .= "</ins></p>";
             if ($text_display != 'title') {
-	            add_filter('excerpt_length', array(&$this, 'excerpt_length'));
+	            add_filter('excerpt_length', array($this, 'excerpt_length'));
                 $excerpt = get_the_excerpt();
 	            $excerpt = apply_filters('the_excerpt', $excerpt);
 	            $ret .= $excerpt;
@@ -706,7 +709,9 @@ class Suffusion_Featured_Posts extends WP_Widget {
         return $ret;
     }
 
-	function widget_display_featured_pager($widget_id, $show_index, $index_position, $index_alignment, $show_controls, $controls_position, $controls_alignment, $prev_text, $pause_text, $next_text, $featured_height) {
+	private function widget_display_featured_pager(string $widget_id, bool $show_index, string $index_position, 
+		string $index_alignment, bool $show_controls, string $controls_position, string $controls_alignment, 
+		string $prev_text, string $pause_text, string $next_text, string $featured_height): string {
         $ret = "";
         if ($show_index || $show_controls) {
             $ret .= "<div id='$widget_id-sliderIndex' class='sliderIndex fix'>";
@@ -747,7 +752,7 @@ class Suffusion_Featured_Posts extends WP_Widget {
 	 *
 	 * @return int
 	 */
-	function excerpt_length() {
+	public function excerpt_length(): int {
 		global $suf_excerpt_custom_length;
 		if (suffusion_admin_check_integer($this->post_excerpt_length)) {
 			return $this->post_excerpt_length;

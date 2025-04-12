@@ -33,11 +33,7 @@ if (have_posts()) {
 <?php
 		suffusion_before_end_post();
 
-		global $suf_image_comments;
-		if (isset($suf_image_comments) && $suf_image_comments == 'on') {
-			// No comments
-		}
-		else {
+		if (!isset($suf_image_comments) || $suf_image_comments !== 'on') {
 			comments_template();
 		}
 ?>

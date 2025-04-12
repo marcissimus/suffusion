@@ -43,7 +43,7 @@ global $post, $suf_mag_content_enabled, $suf_mag_entity_order, $suf_mag_headline
 	}
 
 if (is_array($suf_mag_entity_order)) {
-	$sequence = array();
+	$sequence = [];
 	foreach ($suf_mag_entity_order as $key => $value) {
 		$sequence[] = $value['key'];
 	}
@@ -53,11 +53,11 @@ else {
 }
 
 foreach ($sequence as $entity) {
-	if ($suf_mag_headlines_enabled == 'show' && $entity == 'headlines') {
+	if ($suf_mag_headlines_enabled === 'show' && $entity === 'headlines') {
 		global $suf_mag_headline_title;
 		if (trim($suf_mag_headline_title)) {
 		?>
-			<h2 class='suf-mag-headlines-title fix'><?php echo stripslashes($suf_mag_headline_title); ?></h2>
+			<h2 class='suf-mag-headlines-title fix'><?php echo wp_kses_post(stripslashes($suf_mag_headline_title)); ?></h2>
 		<?php
 		}
 		?>
@@ -80,8 +80,8 @@ foreach ($sequence as $entity) {
 						$first_class = '';
 					}
 		?>
-					<li class='suf-mag-headline-<?php echo $post->ID?> suf-mag-headline <?php echo $first_class; ?>'>
-						<a href="<?php echo get_permalink($post->ID); ?>" class='suf-mag-headline-<?php echo $post->ID?> suf-mag-headline'><?php echo get_the_title($post->ID); ?></a>
+					<li class='suf-mag-headline-<?php echo esc_attr($post->ID); ?> suf-mag-headline <?php echo esc_attr($first_class); ?>'>
+						<a href="<?php echo esc_url(get_permalink($post->ID)); ?>" class='suf-mag-headline-<?php echo esc_attr($post->ID); ?> suf-mag-headline'><?php echo esc_html(get_the_title($post->ID)); ?></a>
 					</li>
 		<?php
 				}
@@ -103,7 +103,7 @@ foreach ($sequence as $entity) {
 					$first_class = '';
 				}
 		?>
-				<div class='suf-mag-headline-photo-<?php echo $post->ID?> suf-mag-headline-photo <?php echo $first_class;?>'>
+				<div class='suf-mag-headline-photo-<?php echo esc_attr($post->ID); ?> suf-mag-headline-photo <?php echo esc_attr($first_class);?>'>
 		<?php
 				echo suffusion_get_image(array('mag-headline' => true));
 		?>
@@ -115,7 +115,7 @@ foreach ($sequence as $entity) {
 		</section><!-- /.suf-mag-headlines -->
 		<?php
 	}
-	else if ($suf_mag_excerpts_enabled == 'show' && $entity == 'excerpts') {
+	else if ($suf_mag_excerpts_enabled === 'show' && $entity === 'excerpts') {
 		$queries = suffusion_get_mag_section_queries(array('meta_check_field' => 'suf_magazine_excerpt', 'category_prefix' => 'suf_mag_excerpt_categories'));
 		$total = 0;
 		foreach ($queries as $query) {
@@ -183,7 +183,7 @@ foreach ($sequence as $entity) {
 			echo "</section>\n";
 		}
 	}
-	else if ($suf_mag_categories_enabled == 'show' && $entity == 'categories') {
+	else if ($suf_mag_categories_enabled === 'show' && $entity === 'categories') {
 		$categories = suffusion_get_allowed_categories('suf_mag_catblock_categories');
 		if ($categories != null && is_array($categories) && count($categories) > 0) {
 			$total = count($categories);

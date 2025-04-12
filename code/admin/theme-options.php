@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Lists out all the options in "Suffusion Theme Options".
  * This file is included in functions.php

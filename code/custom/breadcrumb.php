@@ -173,18 +173,18 @@ $stack = array_reverse($stack);
 $string_stack = array();
 foreach ($stack as $element) {
 	if (is_array($element) && count($element) > 1 && is_string($element[0]) && is_string($element[1])) {
-		$string_stack[] = "<a href='{$element[1]}' title='".esc_attr($element[0])."'>{$element[0]}</a>";
+		$string_stack[] = "<a href='" . esc_url($element[1]) . "' title='" . esc_attr($element[0]) . "'>" . esc_html($element[0]) . "</a>";
 	}
 	else if (is_array($element) && count($element) == 1 && is_string($element[0])) {
-		$string_stack[] = $element[0];
+		$string_stack[] = esc_html($element[0]);
 	}
 	else if (!is_array($element)) {
-		$string_stack[] = $element;
+		$string_stack[] = esc_html($element);
 	}
 }
-$out = implode(' '.$suf_breadcrumb_separator.' ', $string_stack);
-if ($out != '') {
-	$out = "<div id='subnav' class='fix'><div class='breadcrumb'>$out</div></div>";
+$out = implode(' ' . esc_html($suf_breadcrumb_separator) . ' ', $string_stack);
+if ($out !== '') {
+	$out = "<div id='subnav' class='fix'><div class='breadcrumb'>" . $out . "</div></div>";
 }
-echo apply_filters('suffusion_breadcrumb_text', $out);
+echo apply_filters('suffusion_breadcrumb_text', wp_kses_post($out));
 ?>

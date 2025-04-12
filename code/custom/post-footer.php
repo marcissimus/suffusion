@@ -28,13 +28,24 @@ $show_perm = 'suf_post_'.$format.'show_perm';
 $with_title_show_perm = 'suf_post_'.$format.'with_title_show_perm';
 
 global $$meta_position, $$show_cats, $$show_posted_by, $$show_tags, $$show_comment, $$show_perm, $$with_title_show_perm;
-$post_meta_position = apply_filters('suffusion_byline_position', $$meta_position);
-$post_show_cats = $$show_cats;
-$post_show_posted_by = $$show_posted_by;
-$post_show_tags = $$show_tags;
-$post_show_comment = $$show_comment;
-$post_show_perm = $$show_perm;
-$post_with_title_show_perm = $$with_title_show_perm;
+
+$meta_vars = [
+	'meta_position' => $GLOBALS[$meta_position] ?? '',
+	'show_cats' => $GLOBALS[$show_cats] ?? '',
+	'show_posted_by' => $GLOBALS[$show_posted_by] ?? '',
+	'show_tags' => $GLOBALS[$show_tags] ?? '',
+	'show_comment' => $GLOBALS[$show_comment] ?? '',
+	'show_perm' => $GLOBALS[$show_perm] ?? '',
+	'with_title_show_perm' => $GLOBALS[$with_title_show_perm] ?? ''
+];
+
+$post_meta_position = apply_filters('suffusion_byline_position', $meta_vars['meta_position']);
+$post_show_cats = $meta_vars['show_cats'];
+$post_show_posted_by = $meta_vars['show_posted_by'];
+$post_show_tags = $meta_vars['show_tags'];
+$post_show_comment = $meta_vars['show_comment'];
+$post_show_perm = $meta_vars['show_perm'];
+$post_with_title_show_perm = $meta_vars['with_title_show_perm'];
 ?>
 <footer class="post-footer postdata fix">
 <?php

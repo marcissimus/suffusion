@@ -24,17 +24,29 @@ $comments = 'suf_' . $suffusion_byline_type . '_bylines_comments';
 $cats = 'suf_' . $suffusion_byline_type . '_bylines_categories';
 $tags = 'suf_' . $suffusion_byline_type . '_bylines_tags';
 
-global $post, $$enabled, $$date, $$permalinks, $$posted_by, $$comments, $$cats, $$tags;
-$bylines_enabled = $$enabled;
-if (!$bylines_enabled ||$bylines_enabled == 'hide') {
+// Replace variable variables with array access
+$byline_vars = [
+	'enabled' => $enabled,
+	'date' => $date,
+	'permalinks' => $permalinks,
+	'posted_by' => $posted_by,
+	'comments' => $comments,
+	'cats' => $cats,
+	'tags' => $tags
+];
+
+global $post;
+$bylines_enabled = $GLOBALS[$byline_vars['enabled']] ?? '';
+if (!$bylines_enabled || $bylines_enabled == 'hide') {
 	return '';
 }
-$show_post_date = $$date;
-$show_permalinks = $$permalinks;
-$show_posted_by = $$posted_by;
-$show_comments = $$comments;
-$show_cats = $$cats;
-$show_tags = $$tags;
+
+$show_post_date = $GLOBALS[$byline_vars['date']] ?? '';
+$show_permalinks = $GLOBALS[$byline_vars['permalinks']] ?? '';
+$show_posted_by = $GLOBALS[$byline_vars['posted_by']] ?? '';
+$show_comments = $GLOBALS[$byline_vars['comments']] ?? '';
+$show_cats = $GLOBALS[$byline_vars['cats']] ?? '';
+$show_tags = $GLOBALS[$byline_vars['tags']] ?? '';
 
 $ret = '';
 echo "<div class='suf-tile-bylines fix'>\n";

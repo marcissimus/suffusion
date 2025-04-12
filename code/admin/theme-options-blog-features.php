@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Lists out all the options from the Blog Features Section of the theme options
  * This file is included in functions.php
@@ -8,6 +10,7 @@
  */
 
 global $suffusion_social_networks, $suffusion_comment_label_name, $suffusion_comment_label_req, $suffusion_comment_label_email, $suffusion_comment_label_uri, $suffusion_comment_label_your_comment;
+
 $suffusion_blog_features_options = array(
 	array("name" => "Back-End",
 		"type" => "sub-section-2",

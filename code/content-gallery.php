@@ -33,7 +33,7 @@ if (!is_single()) {
 			)
 		);
 		if (!empty($attachments)) {
-			$thumb_id = array_keys($attachments)[0];
+			$thumb_id = array_key_first($attachments);
 		}
 	}
 
@@ -44,6 +44,31 @@ if (!is_single()) {
 		$first_post_gallery = get_post_gallery($post, false);
 		if (isset($first_post_gallery['id']) && $first_post_gallery['id'] != $post_id) {
 			$post_id = $first_post_gallery['id'];
+		}
+		else if (isset($first_post_gallery['ids'])) {
+			$gallery_image_ids = explode(',', $first_post_gallery['ids']);
+			$photo_count = count($gallery_image_ids);
+			$thumb_id = $gallery_image_ids[0];
+			$src = wp_get_attachment_image($thumb_id, 'full');
+			$title = esc_attr(get_the_title($thumb_id));
+			echo "<a href='" . get_permalink($thumb_id) . "' title='" . $title . "'>" . $src . "</a>";
+			if (empty($thumbnails)) {
+				$gallery_image_ctr = 0;
+				if (!isset($suf_gallery_random_thumbs_disable) || $suf_gallery_random_thumbs_disable === '') {
+					shuffle($gallery_image_ids);
+				}
+				foreach ($gallery_image_ids as $gallery_image_id) {
+					if (isset($thumb_id) && $thumb_id != $gallery_image_id) {
+						$img = suffusion_get_image(array('gallery-thumb' => true, 'attachment-id' => $gallery_image_id, 'no-link' => true));
+						$title = esc_attr(get_the_title($gallery_image_ids[$gallery_image_ctr]));
+						$thumbnails[] = '<a href="'.get_permalink($gallery_image_id).'" title="'.$title.'">'.$img.'</a>';
+						$gallery_image_ctr++;
+						if ($gallery_image_ctr == $suf_gallery_format_thumb_count) {
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -103,10 +128,10 @@ if (!is_single()) {
 					$thumb_id = $gallery_image_ids[0];
 					$src = wp_get_attachment_image($thumb_id, 'full');
 					$title = esc_attr(get_the_title($thumb_id));
-					echo "<a href='".get_permalink($thumb_id)."' title='".$title."'>".$src."</a>";
+					echo "<a href='" . get_permalink($thumb_id) . "' title='" . $title . "'>" . $src . "</a>";
 					if (empty($thumbnails)) {
 						$gallery_image_ctr = 0;
-						if (!isset($suf_gallery_random_thumbs_disable) || empty($suf_gallery_random_thumbs_disable)) {
+						if (!isset($suf_gallery_random_thumbs_disable) || $suf_gallery_random_thumbs_disable === '') {
 							shuffle($gallery_image_ids);
 						}
 						foreach ($gallery_image_ids as $gallery_image_id) {

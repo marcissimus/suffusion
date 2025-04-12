@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Lists out all the options from the Typography Section of the theme options
  * This file is included in functions.php

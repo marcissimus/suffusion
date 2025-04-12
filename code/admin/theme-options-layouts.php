@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Lists out all the options from the Layouts Section of the theme options
  * This file is included in functions.php
@@ -8,6 +10,7 @@
  */
 
 global $suffusion_404_title, $suffusion_404_content, $suffusion_all_sitemap_entities, $suffusion_sitemap_entities;
+
 $suffusion_layouts_options = array(
 	array("name" => "Layouts",
 		"type" => "sub-section-2",

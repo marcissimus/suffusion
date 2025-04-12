@@ -8,7 +8,8 @@
  */
 
 class Suffusion_Category_Posts extends WP_Widget {
-	var $post_excerpt_length;
+	private $post_excerpt_length;
+
 	function __construct() {
 		$widget_ops = array('classname' => 'widget-suf-cat-posts',
 			'description' => __("A widget to pull posts based on various selection criteria. You can use this to display posts from a category, latest posts, random posts, popular posts etc.", "suffusion"));
@@ -17,9 +18,6 @@ class Suffusion_Category_Posts extends WP_Widget {
 		parent::__construct("suf-cat-posts", __("Query Posts", "suffusion"), $widget_ops, $control_ops);
 	}
 	
-	function Suffusion_Category_Posts() {
-		self::__construct();		
-	}
 	function widget($args, $instance) {
 		extract($args);
 
@@ -163,7 +161,7 @@ class Suffusion_Category_Posts extends WP_Widget {
 					$ret .= "<li class='fix'><div class='suf-widget-thumb'>".$image."</div><a href='".get_permalink()."' class='suf-widget-thumb-title'>".get_the_title()."</a></li>\n";
 				}
 				else if ($post_style == 'thumbnail-excerpt') {
-					add_filter('excerpt_length', array(&$this, 'excerpt_length'));
+					add_filter('excerpt_length', array($this, 'excerpt_length'));
 					$image = suffusion_get_image(array('widget-thumb' => 'widget-'.$post_thumbnail_size));
 					$ret .= "<li class='fix'><div class='suf-widget-thumb'>".$image."</div><a href='".get_permalink()."' class='suf-widget-thumb-title'>".get_the_title()."</a>".suffusion_excerpt(false, false, false)."</li>\n";
 				}
@@ -206,7 +204,7 @@ class Suffusion_Category_Posts extends WP_Widget {
 					echo "<div class='suf-widget-thumb'>".$image."</div>".$content."\n";
 				}
 				else {
-					add_filter('excerpt_length', array(&$this, 'excerpt_length'));
+					add_filter('excerpt_length', array($this, 'excerpt_length'));
 					$image = suffusion_get_image(array('widget-thumb' => 'widget-'.$post_thumbnail_size));
 					echo "<div class='suf-widget-thumb'>".$image."</div>".suffusion_excerpt(false, false, false)."\n";
 				}

@@ -15,7 +15,9 @@ $suffusion_mosaic_layout = true;
 remove_action('suffusion_before_end_content', 'suffusion_pagination');
 add_action('suffusion_before_end_content', 'suffusion_mosaic_pagination');
 
-if (!isset($suffusion_duplicate_posts)) $suffusion_duplicate_posts = array();
+if (!isset($suffusion_duplicate_posts)) {
+	$suffusion_duplicate_posts = [];
+}
 
 $page_title = get_bloginfo('name');
 if (have_posts()) {
@@ -89,19 +91,19 @@ if (have_posts()) {
 <?php
 	}
 
-	$class = "";
-	$information = "";
-	if (in_array('category', $context)) {
-		$information = $suf_cat_info_enabled == 'enabled' ? suffusion_get_category_information() : false;
+	$class = '';
+	$information = '';
+	if (in_array('category', $context, true)) {
+		$information = $suf_cat_info_enabled === 'enabled' ? suffusion_get_category_information() : false;
 		$class = 'info-category';
 	}
-	else if (in_array('author', $context)) {
-		$information = $suf_author_info_enabled == 'enabled' ? suffusion_get_author_information() : false;
+	else if (in_array('author', $context, true)) {
+		$information = $suf_author_info_enabled === 'enabled' ? suffusion_get_author_information() : false;
 		$class = 'author-profile';
 	}
-	else if (in_array('tag', $context)) {
+	else if (in_array('tag', $context, true)) {
 		$tag_id = get_query_var('tag_id');
-		$information = $suf_tag_info_enabled == 'enabled' ? tag_description($tag_id) : false;
+		$information = $suf_tag_info_enabled === 'enabled' ? tag_description($tag_id) : false;
 		$class = 'info-tag';
 	}
 
@@ -157,17 +159,19 @@ if (have_posts()) {
 				global $suffusion_original_image, $suf_mosaic_zoom, $suf_mosaic_show_title;
 				if (isset($suffusion_original_image) && is_array($suffusion_original_image) && count($suffusion_original_image) > 0) {
 					$overlay_html = "<div class='mosaic-overlay'>";
-					if ($suf_mosaic_zoom == 'zoom') {
-						$overlay_html .= "<a class='suf-mosaic-thumb' href='".$suffusion_original_image[0]."' title='".esc_attr(get_the_title())."' rel='mosaic-lightbox'><span>&nbsp;</span></a>";
+					if ($suf_mosaic_zoom === 'zoom') {
+						$overlay_html .= "<a class='suf-mosaic-thumb' href='" . $suffusion_original_image[0] . 
+							"' title='" . esc_attr(get_the_title()) . "' rel='mosaic-lightbox'><span>&nbsp;</span></a>";
 					}
-					if ($suf_mosaic_show_title == 'hide') {
-						$overlay_html .= "<a class='suf-mosaic-post' href='".get_permalink()."' title='".esc_attr(get_the_title())."'><span>&nbsp;</span></a>";
+					if ($suf_mosaic_show_title === 'hide') {
+						$overlay_html .= "<a class='suf-mosaic-post' href='" . get_permalink() . 
+							"' title='" . esc_attr(get_the_title()) . "'><span>&nbsp;</span></a>";
 					}
 					if ($overlay_html == "<div class='mosaic-overlay'>") {
 						$ret .= "<a class='suf-mosaic-post' href='".get_permalink()."' title='".esc_attr(get_the_title())."'>$image_link</a>";
 						$ret .= "<a class='suf-mosaic-post-title' href='".get_permalink()."'>".get_the_title()."</a>";
 					}
-					else if ($suf_mosaic_show_title == 'show') {
+					else if ($suf_mosaic_show_title === 'show') {
 						$overlay_html .= "</div>";
 						$ret .= $image_link;
 						$ret .= $overlay_html;

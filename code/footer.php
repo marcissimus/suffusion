@@ -15,13 +15,13 @@ suffusion_before_end_container();
 
 <?php
 suffusion_after_end_container();
-if ($suf_footer_layout_style == 'in-align') {
+if ($suf_footer_layout_style === 'in-align') {
 	suffusion_page_footer();
 }
 ?>
 </div><!--/wrapper -->
 <?php
-if ($suf_footer_layout_style != 'in-align') {
+if ($suf_footer_layout_style !== 'in-align') {
 	suffusion_page_footer();
 }
 suffusion_document_footer();

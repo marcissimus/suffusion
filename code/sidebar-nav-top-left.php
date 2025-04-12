@@ -11,9 +11,7 @@ if (!suffusion_is_sidebar_empty(6)) {
 ?>
 	<!-- #top-bar-left-widgets -->
 	<div id="top-bar-left-widgets" class="warea">
-<?php
-	dynamic_sidebar('Top Bar Left Widgets');
-?>
+		<?php dynamic_sidebar('Top Bar Left Widgets'); ?>
 	</div>
 	<!-- /#top-bar-left-widgets -->
 <?php

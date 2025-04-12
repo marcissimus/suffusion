@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Renders the theme options. This file is to be loaded only for the admin screen
  */
@@ -47,46 +48,24 @@ class Suffusion_Options_Renderer {
 			}
 		}
 	}
-	function Suffusion_Options_Renderer($options, $file) {
-		self::__construct($options, $file);
-	}
+
 	/**
 	 * Renders an option whose type is "title". Invoked by add_settings_field.
 	 *
-	 * @param  $value
+	 * @param array $value
 	 * @return void
 	 */
-	function create_title($value) {
-		echo '<h2 class="suf-header-1">'.$value['name']."</h2>\n";
-	}
-
-	/**
-	 * Renders an option whose type is "suf-header-2". Invoked by add_settings_field.
-	 *
-	 * @param  $value
-	 * @return void
-	 */
-	function create_suf_header_2($value) {
-		echo '<h3 class="suf-header-2">'.$value['name']."</h3>\n";
-	}
-
-	/**
-	 * Renders an option whose type is "suf-header-3". Invoked by add_settings_field.
-	 *
-	 * @param  $value
-	 * @return void
-	 */
-	function create_suf_header_3($value) {
-		echo '<h3 class="suf-header-3">'.$value['name']."</h3>\n";
+	function create_title(array $value): void {
+		echo '<h2 class="suf-header-1">'.esc_html($value['name'])."</h2>\n";
 	}
 
 	/**
 	 * Creates the opening markup for each option.
 	 *
-	 * @param  $value
+	 * @param array $value
 	 * @return void
 	 */
-	function create_opening_tag($value) {
+	function create_opening_tag(array $value): void {
 		$group_class = "";
 
 		if (isset($value['grouping'])) {
@@ -94,16 +73,16 @@ class Suffusion_Options_Renderer {
 		}
 		echo '<div class="suf-section fix">'."\n";
 		if ($group_class != "") {
-			echo "<div class='$group_class fix'>\n";
+			echo "<div class='".esc_attr($group_class)." fix'>\n";
 		}
 		if (isset($value['name'])) {
-			echo "<h3>" . $value['name'] . "</h3>\n";
+			echo "<h3>" . esc_html($value['name']) . "</h3>\n";
 		}
 		if (isset($value['desc']) && !(isset($value['type']) && $value['type'] == 'checkbox')) {
-			echo $value['desc']."<br />";
+			echo wp_kses_post($value['desc'])."<br />";
 		}
 		if (isset($value['note'])) {
-			echo "<span class=\"note\">".$value['note']."</span><br />";
+			echo "<span class=\"note\">".wp_kses_post($value['note'])."</span><br />";
 		}
 	}
 
@@ -1129,7 +1108,7 @@ class Suffusion_Options_Renderer {
 	 *
 	 * @return array
 	 */
-	function get_option_structure() {
+	function get_option_structure(): array {
 		if (isset($this->option_structure)) {
 			return $this->option_structure;
 		}
@@ -1265,83 +1244,83 @@ class Suffusion_Options_Renderer {
 			$ctr++;
 			switch ($value['type']) {
 				case "title":
-					add_settings_field('', '', array(&$this, "create_title"), $parent, $section, $value);
+					add_settings_field('', '', array($this, "create_title"), $parent, $section, $value);
 					break;
 
 				case "sub-section-2":
-					add_settings_field('', '', array(&$this, "create_suf_header_2"), $parent, $section, $value);
+					add_settings_field('', '', array($this, "create_suf_header_2"), $parent, $section, $value);
 					break;
 
 				case "sub-section-3":
-					add_settings_field('', '', array(&$this, "create_suf_header_3"), $parent, $section, $value);
+					add_settings_field('', '', array($this, "create_suf_header_3"), $parent, $section, $value);
 					break;
 
 				case "sub-section-4":
-					add_settings_field($section.'-'.$ctr, '', array(&$this, "create_suf_grouping"), $parent, $section, $value);
+					add_settings_field($section.'-'.$ctr, '', array($this, "create_suf_grouping"), $parent, $section, $value);
 					break;
 
 				case "text";
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_text"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_text"), $parent, $section, $value);
 					break;
 
 				case "textarea":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_textarea"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_textarea"), $parent, $section, $value);
 					break;
 
 				case "select":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_select"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_select"), $parent, $section, $value);
 					break;
 
 				case "multi-select":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_multi_select"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_multi_select"), $parent, $section, $value);
 					break;
 
 				case "radio":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_radio"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_radio"), $parent, $section, $value);
 					break;
 
 				case "checkbox":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_checkbox"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_checkbox"), $parent, $section, $value);
 					break;
 
 				case "color-picker":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_color_picker"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_color_picker"), $parent, $section, $value);
 					break;
 
 				case "upload";
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_upload"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_upload"), $parent, $section, $value);
 					break;
 
 				case "sortable-list":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_sortable_list"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_sortable_list"), $parent, $section, $value);
 					break;
 
 				case "slider":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_slider"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_slider"), $parent, $section, $value);
 					break;
 
 				case "background":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_background"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_background"), $parent, $section, $value);
 					break;
 
 				case "border":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_border"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_border"), $parent, $section, $value);
 					break;
 
 				case "font":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_font"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_font"), $parent, $section, $value);
 					break;
 
 				case "associative-array":
-					add_settings_field($value['id'], '', array(&$this, 'create_section_for_associative_array'), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, 'create_section_for_associative_array'), $parent, $section, $value);
 					break;
 
 				case "blurb":
-					add_settings_field($section.'-'.$ctr, '', array(&$this, "create_section_for_blurb"), $parent, $section, $value);
+					add_settings_field($section.'-'.$ctr, '', array($this, "create_section_for_blurb"), $parent, $section, $value);
 					break;
 
 				case "button":
-					add_settings_field($value['id'], '', array(&$this, "create_section_for_button"), $parent, $section, $value);
+					add_settings_field($value['id'], '', array($this, "create_section_for_button"), $parent, $section, $value);
 					break;
 			}
 		}
@@ -1353,13 +1332,12 @@ class Suffusion_Options_Renderer {
 	 * @param $conditions
 	 * @return bool
 	 */
-	function evaluate_conditions($conditions) {
-		// Operators: NOT, OR, AND, NOR, NAND. XOR is too complex
-		if (isset($conditions['operator'])) {
-			$operator = $conditions['operator'];
+	function evaluate_conditions(array $conditions): bool {
+		if (!isset($conditions['operator'])) {
+			$operator = 'OR';
 		}
 		else {
-			$operator = 'OR';
+			$operator = $conditions['operator'];
 		}
 		$nested_conditions = $conditions['conditions'];
 		if (isset($nested_conditions['operator'])) {
@@ -1383,9 +1361,9 @@ class Suffusion_Options_Renderer {
 		}
 	}
 
-	function array_join_boolean($conditions, $operator) {
-		if (count($conditions) == 1) {
-			return $conditions[0];
+	function array_join_boolean(array $conditions, string $operator): bool {
+		if (count($conditions) == 0) {
+			return false;
 		}
 		else {
 			$first = $conditions[0];
@@ -1454,12 +1432,12 @@ class Suffusion_Options_Renderer {
 			else if (isset($option_entity['parent']) && $option_entity['parent'] == 'root') {
 				// This is the sub-menu that we are seeing. Options have already been registered for each of these.
 				// If we weren't using tabs for building the options page we would have registered suffusion-options-$option_entity['slug'] here.
-				// register_setting('suffusion-options-'.$option_entity['slug'], 'suffusion_options', array(&$this, "validate_options"));
+				// register_setting('suffusion-options-'.$option_entity['slug'], 'suffusion_options', array($this, "validate_options"));
 			}
 			else if (isset($option_entity['parent']) && $option_entity['parent'] != 'root') {
 				// This is a section under the current sub-menu. Let's add sections and options
-				register_setting('suffusion-options-'.$option_entity['slug'], 'suffusion_options', array(&$this, "validate_options"));
-				add_settings_section($option_entity['slug'], "", array(&$this, "create_settings_section"), $this->file);
+				register_setting('suffusion-options-'.$option_entity['slug'], 'suffusion_options', array($this, "validate_options"));
+				add_settings_section($option_entity['slug'], "", array($this, "create_settings_section"), $this->file);
 				$this->add_settings_fields($option_entity['slug'], $this->file);
 			}
 		}
@@ -1472,9 +1450,13 @@ class Suffusion_Options_Renderer {
 	 *  3. Each item in Multi-select and sortable-list fields is checked against a master list defined by the 'options' key in the options array
 	 *
 	 * @param $options
-	 * @return array|void
+	 * @return array
 	 */
-	function validate_options($options) {
+	function validate_options($options): array {
+		if (!is_array($options)) {
+			return array();
+		}
+
 		foreach ($options as $option => $option_value) {
 			if (isset($this->reverse_options[$option])) {
 				//Sanitize options
@@ -1596,7 +1578,7 @@ class Suffusion_Options_Renderer {
 					}
 				}
 				else if (substr($options['submit-'.$section], 0, 6) == 'Delete') {
-					return;
+					return array(); // Return empty array instead of void
 				}
 				else if ($options['submit-'.$section] == 'Migrate from 3.0.2 or lower') {
 					unset($options['submit-'.$section]);
@@ -1644,7 +1626,7 @@ class Suffusion_Options_Renderer {
 	 * @param  $section
 	 * @return void
 	 */
-	function create_settings_section($section) {
+	function create_settings_section($section): void {
 		$option_structure = $this->option_structure;
 		if ($this->displayed_sections != 0) {
 			echo "</form>\n";
@@ -1660,7 +1642,7 @@ class Suffusion_Options_Renderer {
 		 * We are registering the same setting across multiple pages, hence we need to pass the "page" parameter to options.php.
 		 * Otherwise options.php returns an error saying "Options page not found"
 		 */
-		echo "<input type='hidden' name='page' value='" . esc_attr($_REQUEST['page']) . "' />\n";
+		echo "<input type='hidden' name='page' value='" . esc_attr($_REQUEST['page'] ?? '') . "' />\n";
 		if (!isset($_REQUEST['tab'])) {
 			$tab = 'theme-options-intro.php';
 		}

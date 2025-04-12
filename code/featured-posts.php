@@ -12,28 +12,28 @@ global $suffusion_duplicate_posts;
 
 function suffusion_display_featured_pager() {
 	global $suf_featured_pager, $suf_featured_controller, $suf_featured_pager_alignment, $suf_featured_controller_alignment;
-	$ret = "";
+	$ret = '';
 	if ($suf_featured_pager != 'hide' || $suf_featured_controller != 'hide') {
-		$ret .= "<div id='sliderIndex' class='fix'>";
+		$ret .= '<div id="sliderIndex" class="fix">';
 		if ($suf_featured_pager != 'hide') {
-			$ret .= "<div id=\"sliderPager\" class=\"$suf_featured_pager_alignment\">";
-			$ret .= "</div>";
+			$ret .= "<div id=\"sliderPager\" class=\"{$suf_featured_pager_alignment}\">";
+			$ret .= '</div>';
 		}
 		if ($suf_featured_controller != 'hide') {
-			$ret .= "<div id=\"sliderControl\" class=\"$suf_featured_controller_alignment\">";
+			$ret .= "<div id=\"sliderControl\" class=\"{$suf_featured_controller_alignment}\">";
 			if ($suf_featured_controller == 'show-overlaid-icons') {
-				$ret .= "\t<a class='sliderPrev' href='#' title='".esc_attr(__('Previous Post', 'suffusion'))."'>&nbsp;</a>";
-				$ret .= "\t<a class='sliderPause' href='#'>". __('Pause', 'suffusion')."</a>";
-				$ret .= "\t<a class='sliderNext' href='#' title='".esc_attr(__('Next Post', 'suffusion'))."'>&nbsp;</a>";
+				$ret .= "\t<a class='sliderPrev' href='#' title='" . esc_attr(__('Previous Post', 'suffusion')) . "'>&nbsp;</a>";
+				$ret .= "\t<a class='sliderPause' href='#'>" . __('Pause', 'suffusion') . "</a>";
+				$ret .= "\t<a class='sliderNext' href='#' title='" . esc_attr(__('Next Post', 'suffusion')) . "'>&nbsp;</a>";
 			}
 			else {
-				$ret .= "\t<a class='sliderPrev' href='#'>&laquo; ". __('Previous Post', 'suffusion')."</a>";
-				$ret .= "\t<a class='sliderPause' href='#'>". __('Pause', 'suffusion')."</a>";
-				$ret .= "\t<a class='sliderNext' href='#'>". __('Next Post', 'suffusion'). " &raquo;</a>";
+				$ret .= "\t<a class='sliderPrev' href='#'>&laquo; " . __('Previous Post', 'suffusion') . "</a>";
+				$ret .= "\t<a class='sliderPause' href='#'>" . __('Pause', 'suffusion') . "</a>";
+				$ret .= "\t<a class='sliderNext' href='#'>" . __('Next Post', 'suffusion') . " &raquo;</a>";
 			}
-			$ret .= "</div>";
+			$ret .= '</div>';
 		}
-		$ret .= "</div>";
+		$ret .= '</div>';
 	}
 	return $ret;
 }
@@ -125,23 +125,23 @@ function suffusion_display_featured_posts($echo = true) {
 	}
 
 	if (isset($tag_query) || isset($cat_query)) {
-		$cat_tag_query_args = array('post__not_in' => $stickies, 'posts_per_page' => $suf_featured_num_posts);
+		$cat_tag_query_args = ['post__not_in' => $stickies, 'posts_per_page' => $suf_featured_num_posts];
 		if (isset($tag_query) && isset($cat_query)) {
-			$cat_tag_query_args['tax_query'] = array(
+			$cat_tag_query_args['tax_query'] = [
 				'relation' => 'OR',
 				$cat_query,
 				$tag_query,
-			);
+			];
 		}
 		else if (isset($cat_query)) {
-			$cat_tag_query_args['tax_query'] = array(
+			$cat_tag_query_args['tax_query'] = [
 				$cat_query,
-			);
+			];
 		}
 		else if (isset($tag_query)) {
-			$cat_tag_query_args['tax_query'] = array(
+			$cat_tag_query_args['tax_query'] = [
 				$tag_query,
-			);
+			];
 		}
 	}
 
@@ -152,13 +152,13 @@ function suffusion_display_featured_posts($echo = true) {
 	}
 
 	if (is_array($featured_pages) && count($featured_pages) > 0 && $count_so_far < $suf_featured_num_posts) {
-        $query_pages = array();
-        foreach ($featured_pages as $featured_page) {
-            $query_pages[count($query_pages)] = $featured_page->ID;
-        }
-        $page_query = new WP_Query(array('post_type' => 'page', 'post__in' => $query_pages, 'posts_per_page' => $suf_featured_num_posts, 'ignore_sticky_posts' => 1, 'orderby' => 'menu_order', 'order' => 'ASC'));
+		$query_pages = [];
+		foreach ($featured_pages as $featured_page) {
+			$query_pages[count($query_pages)] = $featured_page->ID;
+		}
+		$page_query = new WP_Query(['post_type' => 'page', 'post__in' => $query_pages, 'posts_per_page' => $suf_featured_num_posts, 'ignore_sticky_posts' => 1, 'orderby' => 'menu_order', 'order' => 'ASC']);
 		$count_so_far += $page_query->post_count;
-    }
+	}
 
 	if (isset($suf_featured_selected_posts) && trim($suf_featured_selected_posts) != '' && $count_so_far < $suf_featured_num_posts) {
 		$trim_featured_posts = str_replace(' ', '', $suf_featured_selected_posts);

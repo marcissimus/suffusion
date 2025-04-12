@@ -51,9 +51,15 @@ switch ($suffusion_menu_location) {
 		$entity_order = $suf_nav_entity_order;
 		break;
 }
-global $$suffusion_page_option, $$suffusion_cats_option, $$suffusion_links_option, $$suffusion_menus_option;
 
-$selected_menus = $$suffusion_menus_option;
+$options = [
+	'page_option' => $GLOBALS[$suffusion_page_option] ?? '',
+	'cats_option' => $GLOBALS[$suffusion_cats_option] ?? '',
+	'links_option' => $GLOBALS[$suffusion_links_option] ?? '',
+	'menus_option' => $GLOBALS[$suffusion_menus_option] ?? ''
+];
+
+$selected_menus = $options['menus_option'];
 $menu_args = array(
 	'sort_column' => 'menu_order'
 );
@@ -95,7 +101,7 @@ $home_link = suffusion_get_home_link_html($suffusion_menu_location);
 $ret_str = $home_link;
 foreach ($entity_order as $entity) {
 	if ($entity == 'pages') {
-		$selected_pages = $$suffusion_page_option;
+		$selected_pages = $options['page_option'];
 		$page_args = array(
 			'sort_column' => 'menu_order,post_title',
 			'child_of' => 0,
@@ -134,6 +140,7 @@ foreach ($entity_order as $entity) {
 		$ret_str .= $page_str;
 	}
 	else if ($entity == 'categories') {
+		$selected_cats = $options['cats_option'];
 		$cat_args = array(
 			'orderby' => 'name',
 			'order' => 'ASC',
@@ -146,7 +153,6 @@ foreach ($entity_order as $entity) {
 			$cat_args['orderby'] = 'order';
 		}
 
-		$selected_cats = $$suffusion_cats_option;
 		if ($cat_all_sel == 'selected') {
 			if (trim($selected_cats) == '') {
 				$cat_args = array();
@@ -179,6 +185,7 @@ foreach ($entity_order as $entity) {
 		$ret_str .= $cat_str;
 	}
 	else if ($entity == 'links') {
+		$selected_links = $options['links_option'];
 		$link_args = array(
 			'orderby' => 'name',
 			'order' => 'ASC',
@@ -192,7 +199,6 @@ foreach ($entity_order as $entity) {
 			$link_args['orderby'] = 'order';
 		}
 
-		$selected_links = $$suffusion_links_option;
 		if ($link_all_sel == 'selected') {
 			if (trim($selected_links) == '') {
 				$link_args = array();

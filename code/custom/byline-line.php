@@ -14,18 +14,9 @@ global $post, $suf_page_show_comment, $suf_page_show_posted_by, $suf_page_meta_p
 wp_reset_postdata(); // Clear out any changes to the "post" variable
 
 $format = suffusion_get_post_format();
-if ($format == 'standard') {
-	$format = '';
-}
-else {
-	$format = $format . '_';
-}
-if (is_single() && $post->post_type != 'post') {
-	$is_cpt = true;
-}
-else {
-	$is_cpt = false;
-}
+$format = ($format === 'standard') ? '' : $format . '_';
+
+$is_cpt = is_single() && $post->post_type !== 'post';
 
 $show_cats = 'suf_post_' . $format . 'show_cats';
 $show_tags = 'suf_post_' . $format . 'show_tags';
@@ -41,35 +32,35 @@ $post_show_tags = $$show_tags;
 $post_show_comment = $$show_comment;
 $post_show_perm = $$show_perm;
 $post_with_title_show_perm = $$with_title_show_perm;
-$show_date = (!isset($suffusion_cpt_post_id) && !$is_cpt) ? ($suf_date_box_show != 'hide' || ($suf_date_box_show == 'hide-search' && !is_search())) : $suf_cpt_bylines_post_date;
+$show_date = (!isset($suffusion_cpt_post_id) && !$is_cpt) ? ($suf_date_box_show !== 'hide' || ($suf_date_box_show === 'hide-search' && !is_search())) : $suf_cpt_bylines_post_date;
 
-if ($show_date || $post_show_cats != 'hide' ||
-	$post_show_posted_by != 'hide' || $post_show_tags != 'hide' || $post_show_comment != 'hide' || $post_show_perm != 'hide' || $post_with_title_show_perm != 'hide') { ?>
+if ($show_date || $post_show_cats !== 'hide' ||
+	$post_show_posted_by !== 'hide' || $post_show_tags !== 'hide' || $post_show_comment !== 'hide' || $post_show_perm !== 'hide' || $post_with_title_show_perm !== 'hide') { ?>
 <div class='postdata line'>
 	<?php
 		$title = get_the_title();
-		if (($post_show_perm && $post_show_perm != 'hide' && (isset($suffusion_cpt_post_id) || $is_cpt)) ||
-				(!isset($suffusion_cpt_post_id) && !$is_cpt && $post_show_perm != 'hide' && (($title == '' || !$title) || (!($title == '' || !$title) && $post_with_title_show_perm != 'hide')))) {
-			$permalink_text = apply_filters('suffusion_permalink_text', __('Permalink', 'suffusion'));
-			$prepend = apply_filters('suffusion_before_byline_html', do_shortcode($suf_byline_before_permalink), 'permalink');
-			$append = apply_filters('suffusion_after_byline_html', do_shortcode($suf_byline_after_permalink), 'permalink');
-			echo "<span class='permalink'><span class='icon'>&nbsp;</span>".$prepend.suffusion_get_post_title_and_link($permalink_text).$append."</span>\n";
+		if (($post_show_perm && $post_show_perm !== 'hide' && (isset($suffusion_cpt_post_id) || $is_cpt)) ||
+				(!isset($suffusion_cpt_post_id) && !$is_cpt && $post_show_perm !== 'hide' && (($title === '' || !$title) || (!($title === '' || !$title) && $post_with_title_show_perm !== 'hide')))) {
+			$permalink_text = apply_filters('suffusion_permalink_text', esc_html__('Permalink', 'suffusion'));
+			$prepend = apply_filters('suffusion_before_byline_html', wp_kses_post(do_shortcode($suf_byline_before_permalink)), 'permalink');
+			$append = apply_filters('suffusion_after_byline_html', wp_kses_post(do_shortcode($suf_byline_after_permalink)), 'permalink');
+			echo "<span class='permalink'><span class='icon'>&nbsp;</span>" . $prepend . suffusion_get_post_title_and_link($permalink_text) . $append . "</span>\n";
 		}
 	if ($show_date && $show_date !== 'hide') {
-		$prepend = apply_filters('suffusion_before_byline_html', do_shortcode($suf_byline_before_date), 'date');
-		$append = apply_filters('suffusion_after_byline_html', do_shortcode($suf_byline_after_date), 'date');
-		echo "<span class='line-date'><span class='icon'>&nbsp;</span>".$prepend.get_the_time(get_option('date_format')).$append."</span>\n";
+		$prepend = apply_filters('suffusion_before_byline_html', wp_kses_post(do_shortcode($suf_byline_before_date)), 'date');
+		$append = apply_filters('suffusion_after_byline_html', wp_kses_post(do_shortcode($suf_byline_after_date)), 'date');
+		echo "<span class='line-date'><span class='icon'>&nbsp;</span>" . $prepend . esc_html(get_the_time(get_option('date_format'))) . $append . "</span>\n";
 	}
 
-	if ($post_show_posted_by && 'hide' != $post_show_posted_by) {
+	if ($post_show_posted_by && $post_show_posted_by !== 'hide') {
 		suffusion_print_author_byline();
 	}
 
-	if ($post_show_cats != 'hide') {
+	if ($post_show_cats !== 'hide') {
 		$categories = get_the_category();
 		if (is_array($categories) && count($categories) > 0) {
-			$prepend = apply_filters('suffusion_before_byline_html', do_shortcode($suf_byline_before_category), 'category');
-			$append = apply_filters('suffusion_after_byline_html', do_shortcode($suf_byline_after_category), 'category');
+			$prepend = apply_filters('suffusion_before_byline_html', wp_kses_post(do_shortcode($suf_byline_before_category)), 'category');
+			$append = apply_filters('suffusion_after_byline_html', wp_kses_post(do_shortcode($suf_byline_after_category)), 'category');
 			echo '<span class="category"><span class="icon">&nbsp;</span>';
 			echo $prepend;
 			the_category(', ');
@@ -77,11 +68,11 @@ if ($show_date || $post_show_cats != 'hide' ||
 			echo '</span>';
 		}
 	}
-	if ($post_show_tags != 'hide') {
+	if ($post_show_tags !== 'hide') {
 		$tags = get_the_tags();
 		if (is_array($tags) && count($tags) > 0) {
-			$prepend = apply_filters('suffusion_before_byline_html', do_shortcode($suf_byline_before_tag), 'tag');
-			$append = apply_filters('suffusion_after_byline_html', do_shortcode($suf_byline_after_tag), 'tag');
+			$prepend = apply_filters('suffusion_before_byline_html', wp_kses_post(do_shortcode($suf_byline_before_tag)), 'tag');
+			$append = apply_filters('suffusion_after_byline_html', wp_kses_post(do_shortcode($suf_byline_after_tag)), 'tag');
 			echo '<span class="tags tax"><span class="icon">&nbsp;</span>';
 			the_tags($prepend, ', ', $append);
 			echo '</span>';
@@ -92,8 +83,8 @@ if ($show_date || $post_show_cats != 'hide' ||
 		do_action('suffusion_add_taxonomy_bylines_line', $suffusion_cpt_post_id, $is_cpt);
 	}
 
-	if (is_singular() && $post_show_comment && $post_show_comment != 'hide') {
-		if ('open' == $post->comment_status) {
+	if (is_singular() && $post_show_comment && $post_show_comment !== 'hide') {
+		if ('open' === $post->comment_status) {
 			if (is_attachment()) {
 				$mime = get_post_mime_type();
 				if (strpos($mime, '/') > -1) {
@@ -108,28 +99,32 @@ if ($show_date || $post_show_cats != 'hide' ||
 				}
 				else {
 ?>
-			<span class="comments"><span class="icon">&nbsp;</span><a href="#respond"><?php _e('Add comments', 'suffusion'); ?></a></span>
+			<span class="comments"><span class="icon">&nbsp;</span><a href="#respond"><?php esc_html_e('Add comments', 'suffusion'); ?></a></span>
 <?php
 				}
 			}
 			else {
 ?>
-			<span class="comments"><span class="icon">&nbsp;</span><a href="#respond"><?php _e('Add comments', 'suffusion'); ?></a></span>
+			<span class="comments"><span class="icon">&nbsp;</span><a href="#respond"><?php esc_html_e('Add comments', 'suffusion'); ?></a></span>
 <?php
 			}
 		}
 	}
-	else if ($post_show_comment && $post_show_comment != 'hide') {
+	else if ($post_show_comment && $post_show_comment !== 'hide') {
 		echo "<span class='comments'><span class='icon'>&nbsp;</span>";
-		comments_popup_link(__('No Responses', 'suffusion') . ' &#187;', __('1 Response', 'suffusion') . ' &#187;', __('% Responses', 'suffusion') . ' &#187;');
+		comments_popup_link(
+			esc_html__('No Responses', 'suffusion') . ' &#187;',
+			esc_html__('1 Response', 'suffusion') . ' &#187;',
+			esc_html__('% Responses', 'suffusion') . ' &#187;'
+		);
 		echo "</span>";
 	}
 
-	if (get_edit_post_link() != '') {
-		$prepend = apply_filters('suffusion_before_byline_html', do_shortcode($suf_byline_before_edit), 'edit');
-		$append = apply_filters('suffusion_after_byline_html', do_shortcode($suf_byline_after_edit), 'edit');
+	if (get_edit_post_link() !== '') {
+		$prepend = apply_filters('suffusion_before_byline_html', wp_kses_post(do_shortcode($suf_byline_before_edit)), 'edit');
+		$append = apply_filters('suffusion_after_byline_html', wp_kses_post(do_shortcode($suf_byline_after_edit)), 'edit');
 		?>
-		<span class="edit"><span class="icon">&nbsp;</span><?php edit_post_link(__('Edit', 'suffusion'), $prepend, $append); ?></span>
+		<span class="edit"><span class="icon">&nbsp;</span><?php edit_post_link(esc_html__('Edit', 'suffusion'), $prepend, $append); ?></span>
 		<?php
 
 	}

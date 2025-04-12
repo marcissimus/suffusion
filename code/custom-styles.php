@@ -16,7 +16,7 @@ $suffusion_unified_options = suffusion_get_unified_options();
 
 if ($suffusion_unified_options['suf_autogen_css'] == 'autogen' || $suffusion_unified_options['suf_autogen_css'] == 'autogen-inline') {
 	$custom_css = get_option('suffusion_generated_css');
-	if (!isset($custom_css) || (isset($custom_css) && !is_array($custom_css)) || (is_array($custom_css) && !isset($custom_css['css']))) {
+	if (!$custom_css || !is_array($custom_css) || !isset($custom_css['css'])) {
 		$custom_css = suffusion_update_generated_css();
 		echo "/* CSS generated on the fly */\n";
 	}

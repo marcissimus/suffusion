@@ -7,14 +7,14 @@
  * @subpackage CSS
  */
 class Suffusion_CSS_Helper {
-	function get_bg_information($option) {
+	public function get_bg_information(string $option): string {
 		global $$option;
 		$option_val = $$option;
 		if (!is_array($option_val)) {
 			$val_array = array();
 			$vals = explode(';', $option_val);
 			foreach ($vals as $val) {
-				if (trim($val) == '') { continue 1; }
+				if (trim($val) == '') { continue; }
 				$pair = explode('=', $val);
 				$val_array[$pair[0]] = $pair[1];
 			}
@@ -86,7 +86,7 @@ class Suffusion_CSS_Helper {
 		return $bg_string;
 	}
 
-	function get_font_information($option) {
+	public function get_font_information(string $option): string {
 		global $$option;
 		$option_val = $$option;
 		$option_val = wp_specialchars_decode($option_val, ENT_QUOTES);
@@ -130,7 +130,7 @@ class Suffusion_CSS_Helper {
 		return $font_string;
 	}
 
-	function get_border_information($option) {
+	public function get_border_information(string $option): string {
 		global $$option;
 		$option_val = $$option;
 		if (!is_array($option_val)) {
@@ -192,7 +192,7 @@ class Suffusion_CSS_Helper {
 		return $border_string;
 	}
 
-	function get_automatic_widths($cust_wrapper_width, $sidebar_count, $prefix) {
+	public function get_automatic_widths(int $cust_wrapper_width, int $sidebar_count, string $prefix): array {
 		if ($cust_wrapper_width < 600) {
 			$wrapper_width = 600;
 		}
@@ -220,7 +220,7 @@ class Suffusion_CSS_Helper {
 		return $widths;
 	}
 
-	function get_widths_from_components($component_widths, $sidebar_count, $prefix) {
+	public function get_widths_from_components(array $component_widths, int $sidebar_count, string $prefix): array {
 		global $suf_sidebar_alignment, $suf_sidebar_2_alignment, $suf_sbtab_alignment, $suf_mag_headline_image_container_width, $content_width;
 		$widths = array();
 		$main_col_width = $component_widths['main-col'] < 380 ? 380 : $component_widths['main-col'];
@@ -328,7 +328,7 @@ $content_width = is_numeric( $widths['main-col'] ) ? $widths['main-col'] - 30 : 
 		return $widths;
 	}
 
-	function get_fluid_widths($component_widths, $sidebar_count, $prefix) {
+	public function get_fluid_widths(array $component_widths, int $sidebar_count, string $prefix): array {
 		global $suf_sidebar_alignment, $suf_sidebar_2_alignment, $suf_sbtab_alignment, $suf_mag_headline_image_container_width, $content_width;
 		$widths = array();
 		$sb_1_width = $component_widths['sidebar-1'] < 95 ? 95 : $component_widths['sidebar-1'];
@@ -436,7 +436,7 @@ $content_width = is_numeric( $widths['main-col'] ) ? $widths['main-col'] - 30 : 
 		return $widths;
 	}
 
-	function get_widths_for_template($prefix, $sb_count, $template = null) {
+	public function get_widths_for_template(string $prefix, int $sb_count, ?string $template = null): array {
 		$wrapper_width_type_var = 'suf'.$prefix.'_wrapper_width_type';
 		$wrapper_width_preset_var = 'suf'.$prefix.'_wrapper_width_preset';
 		$wrapper_width_var = 'suf'.$prefix.'_wrapper_width';
@@ -498,7 +498,7 @@ $content_width = is_numeric( $widths['main-col'] ) ? $widths['main-col'] - 30 : 
 		return apply_filters('suffusion_set_template_widths', $widths, $template);
 	}
 
-	function set_widths_for_no_sidebars($widths) {
+	public function set_widths_for_no_sidebars(array $widths): array {
 		if (!is_array($widths)) $widths = array();
 		$widths['sidebar-1'] = 0;
 		$widths['sidebar-2'] = 0;
@@ -517,7 +517,7 @@ $content_width = is_numeric( $widths['main-col'] ) ? $widths['main-col'] - 30 : 
 		return $widths;
 	}
 
-	function set_widths_for_double_left_sidebar_layout($widths, $sb_1_width, $sb_2_width) {
+	public function set_widths_for_double_left_sidebar_layout(array $widths, int $sb_1_width, int $sb_2_width): array {
 		if (!is_array($widths)) $widths = array();
 		$widths['s1-lmargin'] = 0;
 		$widths['s1-rmargin'] = 0;
@@ -536,7 +536,7 @@ $content_width = is_numeric( $widths['main-col'] ) ? $widths['main-col'] - 30 : 
 		return $widths;
 	}
 
-	function set_widths_for_double_right_sidebar_layout($widths, $sb_1_width, $sb_2_width) {
+	public function set_widths_for_double_right_sidebar_layout(array $widths, int $sb_1_width, int $sb_2_width): array {
 		if (!is_array($widths)) $widths = array();
 		$widths['s1-lmargin'] = 0;
 		$widths['s1-rmargin'] = 0;
@@ -551,7 +551,7 @@ $content_width = is_numeric( $widths['main-col'] ) ? $widths['main-col'] - 30 : 
 		return $widths;
 	}
 
-	function set_widths_for_single_left_single_right_sidebar_layout($widths, $lwidth, $rwidth, $left, $right) {
+	public function set_widths_for_single_left_single_right_sidebar_layout(array $widths, int $lwidth, int $rwidth, int $left, int $right): array {
 		if (!is_array($widths)) $widths = array();
 		$l = 's'.$left;
 		$r = 's'.$right;

@@ -6,14 +6,14 @@
  * @subpackage Templates
  */
 
-if (is_search()) {
+if (is_search() === true) {
 ?>
 	<article class="post fix">
 		<header class="post-header">
-			<h2 class='posttitle'><?php _e('Nothing Found', 'suffusion');?></h2>
+			<h2 class='posttitle'><?php _e('Nothing Found', 'suffusion'); ?></h2>
 		</header>
 		<div class='entry'>
-			<p><?php _e('Please try another search.', 'suffusion');?></p>
+			<p><?php _e('Please try another search.', 'suffusion'); ?></p>
 			<?php get_search_form(); ?>
 		</div>
 	</article><!--post -->
@@ -23,10 +23,10 @@ else {
 ?>
 	<article class="post fix">
 		<header class="post-header">
-			<h2 class='posttitle'><?php _e("Not Found", "suffusion"); ?></h2>
+			<h2 class='posttitle'><?php _e('Not Found', 'suffusion'); ?></h2>
 		</header>
 		<div class='entry'>
-			<p><?php _e("Sorry, but you are looking for something that isn't here", "suffusion"); ?></p>
+			<p><?php _e("Sorry, but you are looking for something that isn't here", 'suffusion'); ?></p>
 		</div>
 	</article><!--post -->
 <?php

@@ -33,7 +33,7 @@ if (!is_single()) {
 			)
 		);
 		if (!empty($attachments)) {
-			$thumb_id = array_keys($attachments)[0];
+			$thumb_id = array_key_first($attachments);
 		}
 	}
 

@@ -32,14 +32,24 @@ if (have_posts()) {
 
 			<ul class="category-archives">
 <?php
-		$show_hierarchical = $suf_temp_cats_hierarchical == "hierarchical" ? true : false;
-		$show_post_count = $suf_temp_cats_post_count == "show" ? true : false;
-		if ($suf_temp_cats_rss == "show") {
-			wp_list_categories(array('feed' => __('RSS', 'suffusion'), 'show_count' => $show_post_count, 'hierarchical' => $show_hierarchical,
-				'use_desc_for_title' => false, 'title_li' => false ));
+		$show_hierarchical = $suf_temp_cats_hierarchical === "hierarchical";
+		$show_post_count = $suf_temp_cats_post_count === "show";
+		if ($suf_temp_cats_rss === "show") {
+			wp_list_categories([
+				'feed' => __('RSS', 'suffusion'),
+				'show_count' => $show_post_count,
+				'hierarchical' => $show_hierarchical,
+				'use_desc_for_title' => false,
+				'title_li' => false
+			]);
 		}
 		else {
-			wp_list_categories(array('show_count' => $show_post_count, 'hierarchical' => $show_hierarchical, 'use_desc_for_title' => false, 'title_li' => false ));
+			wp_list_categories([
+				'show_count' => $show_post_count,
+				'hierarchical' => $show_hierarchical,
+				'use_desc_for_title' => false,
+				'title_li' => false
+			]);
 		}
 ?>
 			</ul><!-- /.category-archives -->

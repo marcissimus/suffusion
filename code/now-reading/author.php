@@ -33,7 +33,7 @@ if( can_now_reading_admin() ) {
 			</div>
 			<div class="booklisting">
 <?php
-$nr_book_query = "author={$GLOBALS['nr_author']}&num=-1";
+$nr_book_query = "author=" . $GLOBALS['nr_author'] . "&num=-1";
 get_template_part('now-reading/nr-shelf');
 ?>
 			</div><!-- /.booklisting -->

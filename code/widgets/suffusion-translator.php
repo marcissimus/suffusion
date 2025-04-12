@@ -8,6 +8,8 @@
  */
 
 class Suffusion_Google_Translator extends WP_Widget {
+	private $languages;
+
 	function __construct() {
 		$widget_ops = array('classname' => 'widget-suf-google-translator', 'description' => __("A widget to let people use Google Translator to translate your site", "suffusion"));
 		parent::__construct("suf-google-translator", __("Google Translator", "suffusion"), $widget_ops);
@@ -65,10 +67,6 @@ class Suffusion_Google_Translator extends WP_Widget {
             "cy" => "Welsh",
             "yi" => "Yiddish"
         );
-	}
-	
-	function Suffusion_Google_Translator() {
-			self::__construct();		
 	}
 	
 	function widget( $args, $instance ) {

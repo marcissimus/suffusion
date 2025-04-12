@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Lists out all the options from the Other Graphical Elements section of the theme options
  * This file is included in functions.php
@@ -8,6 +10,7 @@
  */
 
 global $suffusion_theme_name;
+
 $suffusion_visual_effects_options = array(
 	// Main category for Look and Feel settings
 	array("name" => "Other Graphical Elements",

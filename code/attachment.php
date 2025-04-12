@@ -5,7 +5,7 @@ get_header();
 	<?php suffusion_before_begin_content(); ?>
 	<div id="content">
 <?php
-global $post;
+$post = $GLOBALS['post'] ?? null;
 if (have_posts()) {
 	while (have_posts()) {
 		the_post();
@@ -22,20 +22,18 @@ if (have_posts()) {
 			</div><!--/entry -->
 <?php
 		// Due to the inclusion of Ad Hoc Widgets the global variable $post might have got changed. We will reset it to the original value.
-		$post = $original_post;
+		$GLOBALS['post'] = $original_post;
 		suffusion_after_content();
 ?>
 		</div><!-- .entry-container -->
 <?php
 		suffusion_before_end_post();
 		$mime = get_post_mime_type();
-		if (strpos($mime, '/') > -1) {
-			$mime = substr($mime, 0, strpos($mime, '/'));
-		}
+		$mime = strpos($mime, '/') !== false ? substr($mime, 0, strpos($mime, '/')) : $mime;
 		$comments_disabled_var = "suf_{$mime}_comments";
-		global $$comments_disabled_var;
-		if (isset($$comments_disabled_var)) {
-			$comments_disabled = $$comments_disabled_var;
+		
+		if (isset($GLOBALS[$comments_disabled_var])) {
+			$comments_disabled = $GLOBALS[$comments_disabled_var];
 			if (!$comments_disabled) {
 				comments_template();
 			}

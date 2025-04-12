@@ -1,5 +1,8 @@
 <?php
+declare(strict_types=1);
+
 global $suffusion_custom_types_options;
+
 $suffusion_custom_types_options = array(
 	array("name" => "Custom Types",
 		"type" => "sub-section-2",

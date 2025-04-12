@@ -134,29 +134,29 @@ else {
 */    
 function hex_to_rgb($hex) {
     // remove '#'
-    if(substr($hex,0,1) == '#')
-        $hex = substr($hex,1) ;
-
-    // expand short form ('fff') color
-    if(strlen($hex) == 3)
-    {
-        $hex = substr($hex,0,1) . substr($hex,0,1) .
-               substr($hex,1,1) . substr($hex,1,1) .
-               substr($hex,2,1) . substr($hex,2,1) ;
+    if (str_starts_with($hex, '#')) {
+        $hex = substr($hex, 1);
     }
 
-	if(strlen($hex) != 6) {
-		$rgb['red'] = hexdec("ff");
-		$rgb['green'] = hexdec("ff");
-		$rgb['blue'] = hexdec("ff");
-	}
-	else {
-	    // convert
-		$rgb['red'] = hexdec(substr($hex,0,2)) ;
-	    $rgb['green'] = hexdec(substr($hex,2,2)) ;
-		$rgb['blue'] = hexdec(substr($hex,4,2)) ;
-	}
+    // expand short form ('fff') color to full form
+    if (strlen($hex) === 3) {
+        $hex = $hex[0] . $hex[0] . 
+               $hex[1] . $hex[1] . 
+               $hex[2] . $hex[2];
+    }
 
-    return $rgb ;
+    if (strlen($hex) !== 6) {
+        return [
+            'red' => hexdec("ff"),
+            'green' => hexdec("ff"),
+            'blue' => hexdec("ff")
+        ];
+    }
+
+    return [
+        'red' => hexdec(substr($hex, 0, 2)),
+        'green' => hexdec(substr($hex, 2, 2)),
+        'blue' => hexdec(substr($hex, 4, 2))
+    ];
 }
 ?>

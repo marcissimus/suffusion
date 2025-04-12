@@ -17,14 +17,13 @@ $paged = get_query_var('paged');
 if (!isset($paged) || empty($paged)) {
 	$paged = 1;
 }
-//$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
 $args = array(
 	'orderby' => 'date',
 	'order' => 'DESC',
 	'paged' => $paged,
 );
 $temp = $wp_query;  // assign original query to temp variable for later use
-//$wp_query = null; // Resetting this to null was causing a PHP Notice to pop up
 $wp_query = new WP_Query($args);
 
 suffusion_query_posts();

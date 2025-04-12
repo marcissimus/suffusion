@@ -9,21 +9,22 @@
 global $suffusion, $suf_search_excerpt;
 
 get_header();
-$suffusion->set_content_layout($suf_search_excerpt);
+$suffusion->set_content_layout($suf_search_excerpt ?? 'blog');
 suffusion_query_posts();
 ?>
     <div id="main-col">
 <?php suffusion_before_begin_content(); ?>
       <div id="content" class="hfeed">
 <?php
-if ($suf_search_excerpt == 'list') {
+$layout = $suf_search_excerpt ?? 'blog';
+if ($layout === 'list') {
 	get_template_part('layouts/layout-list');
 }
-else if ($suf_search_excerpt == 'tiles') {
+else if ($layout === 'tiles') {
 	suffusion_after_begin_content();
 	get_template_part('layouts/layout-tiles');
 }
-else if ($suf_search_excerpt == 'mosaic') {
+else if ($layout === 'mosaic') {
 	get_template_part('layouts/layout-mosaic');
 }
 else {

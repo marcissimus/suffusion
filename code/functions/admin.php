@@ -542,16 +542,23 @@ function suffusion_edit_mm_walker($class_name) {
  */
 function suffusion_admin_upload_file() {
 	global $suffusion_options_renderer;
-	$save_type = $_POST['type'];
+	$save_type = $_POST['type'] ?? '';
+	
 	if ($save_type == 'upload') {
-		$data = $_POST['data']; // Acts as the name
+		$data = $_POST['data'] ?? ''; // Acts as the name
+		if (!isset($_FILES[$data])) {
+			return;
+		}
+		
 		$filename = $_FILES[$data];
 		$filename['name'] = preg_replace('/[^a-zA-Z0-9._\-]/', '', $filename['name']);
 
-		$override['test_form'] = false;
-		$override['action'] = 'wp_handle_upload';
+		$override = [
+			'test_form' => false,
+			'action' => 'wp_handle_upload'
+		];
+		
 		$uploaded_file = wp_handle_upload($filename, $override);
-
 		$image_id = substr($data, 7);
 
 		if (!empty($uploaded_file['error'])) {
@@ -565,10 +572,12 @@ function suffusion_admin_upload_file() {
 		}
 	}
 	elseif ($save_type == 'image_reset') {
-		$data = $_POST['data'];
+		$data = $_POST['data'] ?? '';
 		$image_id = substr($data, 6);
 		if (isset($suffusion_options_renderer) && isset($suffusion_options_renderer->options)) {
-			if (isset($suffusion_options_renderer->options[$image_id])) unset($suffusion_options_renderer->options[$image_id]);
+			if (isset($suffusion_options_renderer->options[$image_id])) {
+				unset($suffusion_options_renderer->options[$image_id]);
+			}
 		}
 	}
 	die();

@@ -7,12 +7,11 @@
  * @subpackage Sidebars
  */
 
-if (!suffusion_is_sidebar_empty('8')) {?>
+if (!suffusion_is_sidebar_empty('8')) {
+?>
 	<!-- left-header-widgets -->
-	<div id="left-header-widgets" class='warea fix'>
-	<?php
-		dynamic_sidebar('Left Header Widgets');
-	?>
+	<div id="left-header-widgets" class="warea fix">
+		<?php dynamic_sidebar('Left Header Widgets'); ?>
 	</div>
 	<!-- /left-header-widgets -->
 <?php

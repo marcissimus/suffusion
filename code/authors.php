@@ -35,7 +35,7 @@ if (have_posts()) {
 		$i = 0;
 		foreach ($authors as $author) {
 			$author_id = $author->ID;
-			if ($i%2 == 0) {
+			if ($i % 2 === 0) {
 				$odd_or_even = 'even';
 			}
 			else {

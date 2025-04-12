@@ -39,7 +39,7 @@ function suffusion_theme_setup() {
 	$suffusion = new Suffusion();
 	$suffusion->init();
 
-	if(is_admin() && isset($_GET['activated']) && $pagenow = 'themes.php') {
+	if(is_admin() && isset($_GET['activated']) && $pagenow === 'themes.php') {
 		header('Location: '.admin_url().'themes.php?page=suffusion-options-manager&now-active=true');
 	}
 
@@ -110,8 +110,9 @@ function suffusion_add_theme_supports() {
             'suf_body_background_color' => suffusion_evaluate_style('suf_body_background_color', $theme_name),
             'suf_body_background_image' => suffusion_evaluate_style('suf_body_background_image', $theme_name, 'empty'),
         );
-        // remove null and empty string values
-        $options = array_filter($options, fn($value) => (!is_null($value) && $value !== ''));
+        $options = array_filter($options, function($value) {
+            return (!is_null($value) && $value !== '');
+        });
         $options = wp_parse_args((array)$options, $defaults);
 
         if ($options['suf_header_style_setting'] == 'custom') {
@@ -940,14 +941,14 @@ function suffusion_get_associative_array($stored_value) {
 				$inner_ctr++;
 				if ($inner_ctr == 1) {
 					$index = $pairs_string;
-					continue 1;
+					continue;
 				}
-				if (trim($pairs_string) != '') {
+				if (trim($pairs_string) !== '') {
 					$pairs = explode(';', $pairs_string);
 					foreach ($pairs as $pair) {
 						$name_value = explode('=', $pair);
 						if (count($name_value) <= 1) {
-							continue 1;
+							continue;
 						}
 						$pair_array[$name_value[0]] = $name_value[1];
 					}

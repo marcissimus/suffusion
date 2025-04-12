@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Contains the layout functions for Suffusion's options.
  * This file is included in functions.php
@@ -130,7 +132,7 @@ function suffusion_render_options() {
  * @param array $custom_css
  * @return bool
  */
-function suffusion_save_css_to_file($custom_css = array()) {
+function suffusion_save_css_to_file($custom_css = array()): bool {
 
 	if(!isset($_GET['settings-updated'])) {
 		return false;
@@ -151,7 +153,7 @@ function suffusion_save_css_to_file($custom_css = array()) {
 	$dirname = trailingslashit($upload_dir['basedir']).'suffusion';
 	if (!is_dir($dirname)) {
 		if (!$wp_filesystem->mkdir($dirname)) {
-			echo "<div class='error'><p>Failed to create directory $dirname. Please check your folder permissions.</p></div>";
+			echo "<div class='error'><p>Failed to create directory " . esc_html($dirname) . ". Please check your folder permissions.</p></div>";
 		}
 	}
 
@@ -166,7 +168,7 @@ function suffusion_save_css_to_file($custom_css = array()) {
 			@unlink($filename); // pre-empty
 		}
 		if (!$wp_filesystem->put_contents($filename, $custom_css['css'], FS_CHMOD_FILE)) {
-			echo "<div class='error'><p>Failed to save file $filename. Please check your folder permissions.</p></div>";
+			echo "<div class='error'><p>Failed to save file " . esc_html($filename) . ". Please check your folder permissions.</p></div>";
 		}
 	}
 
@@ -309,7 +311,7 @@ function suffusion_admin_style_loader() {
  *
  * @return string
  */
-function suffusion_translation_checker() {
+function suffusion_translation_checker(): string {
 	if (!defined('WPLANG') || WPLANG == 'en' || WPLANG == '') {
 		$lang = 'en_US';
 	}
@@ -325,26 +327,35 @@ function suffusion_translation_checker() {
 
 	$message = "";
 	$supported_langs = ['en_US', 'de_DE', 'es_ES'];
-	if (!in_array($lang, $supported_langs)) {
+	if (!in_array($lang, $supported_langs, true)) {
 		if (!is_child_theme()) {
 			if (file_exists(get_template_directory()."/translation/$lang.mo")) {
-				$message = "<div class='updated'>You are using an international version of WordPress that is not supported by Suffusion, and your translation files are in the theme's main folder.
-					You might lose these files if you upgrade the theme. Move your translations to a child theme instead or check <a href='https://github.com/sayontan/suffusion/blob/master/TRANSLATION.md'>GitHub</a>
-				    on how to add your translation to the project.</div>";
+				$message = "<div class='updated'>" . 
+					esc_html__("You are using an international version of WordPress that is not supported by Suffusion, and your translation files are in the theme's main folder. " .
+					"You might lose these files if you upgrade the theme. Move your translations to a child theme instead or check ", 'suffusion') .
+					"<a href='https://github.com/sayontan/suffusion/blob/master/TRANSLATION.md'>GitHub</a> " .
+					esc_html__("on how to add your translation to the project.", 'suffusion') . "</div>";
 			}
 			else {
-				$message = "<div class='updated'>You are using an international version of WordPress that is not supported by Suffusion.
-					Translations for your language <a href='https://github.com/sayontan/suffusion/blob/master/TRANSLATION.md'>might be available</a>.</div>";
+				$message = "<div class='updated'>" . 
+					esc_html__("You are using an international version of WordPress that is not supported by Suffusion. " .
+					"Translations for your language ", 'suffusion') .
+					"<a href='https://github.com/sayontan/suffusion/blob/master/TRANSLATION.md'>" .
+					esc_html__("might be available", 'suffusion') . "</a>.</div>";
 			}
 		}
 		else {
 			if (file_exists(get_template_directory()."/translation/$lang.mo") && !file_exists(get_stylesheet_directory()."/translation/$lang.mo")) {
-				$message = "<div class='updated'>Your translation files are in Suffusion's folder. You might lose these files if you upgrade the theme.
-					<a href='https://github.com/sayontan/suffusion/blob/master/TRANSLATION.md'>Move your translations to a child theme</a> instead.</div>";
+				$message = "<div class='updated'>" .
+					esc_html__("Your translation files are in Suffusion's folder. You might lose these files if you upgrade the theme. " .
+					"Move your translations to a child theme instead.", 'suffusion') . "</div>";
 			}
 			else if (!file_exists(get_stylesheet_directory()."/translation/$lang.mo")) {
-				$message = "<div class='updated'>You are using an international version of WordPress that is not supported by Suffusion.
-					Translations for your language <a href='https://github.com/sayontan/suffusion/blob/master/TRANSLATION.md'>might be available</a>.</div>";
+				$message = "<div class='updated'>" . 
+					esc_html__("You are using an international version of WordPress that is not supported by Suffusion. " .
+					"Translations for your language ", 'suffusion') .
+					"<a href='https://github.com/sayontan/suffusion/blob/master/TRANSLATION.md'>" .
+					esc_html__("might be available", 'suffusion') . "</a>.</div>";
 			}
 		}
 	}
@@ -357,17 +368,27 @@ function suffusion_translation_checker() {
  *
  * @return string
  */
-function suffusion_bp_checker() {
+function suffusion_bp_checker(): string {
 	global $bp;
 	$message = "";
 	if (isset($bp)) {// Using BP
 		if (!class_exists('Suffusion_BP_Pack')) {
-			$message = "<div class='updated'>You are using BuddyPress. Please install the <a href='http://wordpress.org/extend/plugins/suffusion-buddypress-pack'>Suffusion BuddyPress Pack</a> for best results.
-				See the <a href='http://www.aquoid.com/news/plugins/suffusion-buddypress-pack/'>plugin's home page</a> for further instructions.</div>";
+			$message = "<div class='updated'>" . 
+				esc_html__("You are using BuddyPress. Please install the ", 'suffusion') .
+				"<a href='http://wordpress.org/extend/plugins/suffusion-buddypress-pack'>Suffusion BuddyPress Pack</a> " .
+				esc_html__("for best results. See the ", 'suffusion') .
+				"<a href='http://www.aquoid.com/news/plugins/suffusion-buddypress-pack/'>" .
+				esc_html__("plugin's home page", 'suffusion') . "</a> " .
+				esc_html__("for further instructions.", 'suffusion') . "</div>";
 		}
 		else if (!is_child_theme()) {
-			$message = "<div class='updated'>The <a href='http://wordpress.org/extend/plugins/suffusion-buddypress-pack'>Suffusion BuddyPress Pack</a> works best in a child theme.
-				See the <a href='http://www.aquoid.com/news/plugins/suffusion-buddypress-pack/'>plugin's home page</a> for further instructions.</div>";
+			$message = "<div class='updated'>" .
+				esc_html__("The ", 'suffusion') .
+				"<a href='http://wordpress.org/extend/plugins/suffusion-buddypress-pack'>Suffusion BuddyPress Pack</a> " .
+				esc_html__("works best in a child theme. See the ", 'suffusion') .
+				"<a href='http://www.aquoid.com/news/plugins/suffusion-buddypress-pack/'>" .
+				esc_html__("plugin's home page", 'suffusion') . "</a> " .
+				esc_html__("for further instructions.", 'suffusion') . "</div>";
 		}
 	}
 	return $message;

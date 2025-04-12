@@ -17,14 +17,14 @@ $layout = $suffusion->get_content_layout();
 <?php suffusion_before_begin_content(); ?>
 		<div id="content" class="hfeed">
 <?php
-if ($layout == 'list') {
+if ($layout === 'list') {
 	get_template_part('layouts/layout-list');
 }
-else if ($layout == 'tiles') {
+else if ($layout === 'tiles') {
 	suffusion_after_begin_content();
 	get_template_part('layouts/layout-tiles');
 }
-else if ($layout == 'mosaic') {
+else if ($layout === 'mosaic') {
 	get_template_part('layouts/layout-mosaic');
 }
 else {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Lists out all the options from the Sidebar Configuration Section of the theme options
  * This file is included in functions.php
@@ -8,6 +9,7 @@
  */
 
 global $suffusion_theme_name, $suffusion_sidebar_tabs;
+
 $suffusion_sidebars_and_widgets_options = array(
 	// Main category for Look and Feel settings
 	array("name" => "Sidebars",

@@ -178,13 +178,12 @@ function suffusion_comment_navigation() {
  * @return int
  */
 function suffusion_excerpt_length($length) {
-	global $suf_excerpt_custom_length;
-	if (suffusion_admin_check_integer($suf_excerpt_custom_length)) {
-		return $suf_excerpt_custom_length;
+	$custom_length = $GLOBALS['suf_excerpt_custom_length'] ?? null;
+	
+	if (suffusion_admin_check_integer($custom_length)) {
+		return $custom_length;
 	}
-	else {
-		return $length;
-	}
+	return $length;
 }
 
 /**
@@ -193,21 +192,21 @@ function suffusion_excerpt_length($length) {
  * @return int
  */
 function suffusion_excerpt_length_cat_block($length) {
-	global $suf_mag_catblocks_excerpt_length, $suf_excerpt_custom_length;
-	if (suffusion_admin_check_integer($suf_mag_catblocks_excerpt_length)) {
-		return $suf_mag_catblocks_excerpt_length;
+	$mag_length = $GLOBALS['suf_mag_catblocks_excerpt_length'] ?? null;
+	$custom_length = $GLOBALS['suf_excerpt_custom_length'] ?? null;
+	
+	if (suffusion_admin_check_integer($mag_length)) {
+		return $mag_length;
 	}
-	else if (suffusion_admin_check_integer($suf_excerpt_custom_length)) {
-		return $suf_excerpt_custom_length;
+	else if (suffusion_admin_check_integer($custom_length)) {
+		return $custom_length;
 	}
-	else {
-		return $length;
-	}
+	return $length;
 }
 
 function suffusion_excerpt_more_replace($more) {
 	global $post, $suf_excerpt_read_more_style, $suf_excerpt_custom_more_text;
-	if ($suf_excerpt_read_more_style == 'append') {
+	if ($suf_excerpt_read_more_style == 'append' || !isset($post)) {
 		return '';
 	}
 
@@ -218,7 +217,7 @@ function suffusion_excerpt_more_replace($more) {
 
 function suffusion_excerpt_more_append($output) {
 	global $post, $suf_excerpt_read_more_style, $suf_excerpt_custom_more_text;
-	if ($suf_excerpt_read_more_style == 'replace') {
+	if ($suf_excerpt_read_more_style == 'replace' || !isset($post)) {
 		return $output;
 	}
 	$stripped = stripslashes($suf_excerpt_custom_more_text);
@@ -430,9 +429,10 @@ function suffusion_comments_callback($comment, $args, $depth) {
  */
 function suffusion_filter_attachment_display($type, $mime) {
 	$option_name = "suf_{$mime}_att_type";
-	global $$option_name;
-	if (isset($$option_name)) {
-		return $$option_name;
+	$display_type = $GLOBALS[$option_name] ?? null;
+	
+	if (isset($display_type)) {
+		return $display_type;
 	}
 	return $type;
 }

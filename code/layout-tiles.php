@@ -12,13 +12,15 @@ global $suf_tile_excerpts_per_row, $suf_tile_image_settings, $suf_tile_images_en
 global $suffusion_cpt_post_id;
 $suffusion_tile_layout = true;
 
-if (!isset($suffusion_duplicate_posts)) $suffusion_duplicate_posts = array();
+if (!isset($suffusion_duplicate_posts)) {
+	$suffusion_duplicate_posts = [];
+}
 
 if (have_posts()) {
 	$suffusion_current_post_index = 0;
 	$suffusion_full_post_count_for_view = suffusion_get_full_content_count();
 
-	$custom_classes = array();
+	$custom_classes = [];
 	if (isset($suffusion_cpt_post_id)) {
 		add_action('suffusion_add_taxonomy_bylines_line', 'suffusion_cpt_line_taxonomies', 10, 2);
 		add_action('suffusion_add_taxonomy_bylines_pullout', 'suffusion_cpt_line_taxonomies', 10, 4);
@@ -73,7 +75,7 @@ if (have_posts()) {
 	$excerpts_per_row = (int)$suf_tile_excerpts_per_row;
 	if (isset($suffusion_cpt_post_id)) {
 		$cpt_posts_per_row = suffusion_get_post_meta($suffusion_cpt_post_id, 'suf_cpt_posts_per_row', true);
-		if (!$cpt_posts_per_row && is_integer($cpt_posts_per_row)) {
+		if (!$cpt_posts_per_row && is_int($cpt_posts_per_row)) {
 			$excerpts_per_row = $cpt_posts_per_row;
 		}
 	}
@@ -116,10 +118,12 @@ if (have_posts()) {
 			$image_size = $suf_tile_image_settings == 'inherit' ? 'mag-excerpt' : 'tile-thumb';
 			$image_link = suffusion_get_image(array($image_size => true));
 
-			$show_image = isset($show_image) ? $show_image : (($suf_tile_images_enabled == 'show') || ($suf_tile_images_enabled == 'hide-empty' && $image_link != ''));
+			$show_image = isset($show_image) ? $show_image : 
+				($suf_tile_images_enabled === 'show' || 
+				($suf_tile_images_enabled === 'hide-empty' && $image_link !== ''));
 			$topmost = 'suf-tile-topmost';
 			if ($show_image) {
-				echo "\t\t<div class='suf-tile-image $topmost'>".$image_link."</div>\n";
+				echo "\t\t<div class='suf-tile-image $topmost'>" . $image_link . "</div>\n";
 				$topmost = '';
 			}
 			echo "\t\t<h2 class='suf-tile-title $topmost'><a class='entry-title' rel='bookmark' href='".get_permalink($post->ID)."'>".get_the_title($post->ID)."</a></h2>\n";

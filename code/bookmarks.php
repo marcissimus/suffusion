@@ -29,7 +29,7 @@ if (have_posts()) {
 		    <div class="entry fix">
 <?php
         suffusion_content();
-        $args = array(
+        $args = [
             'title_li' => false,
             'title_before' => '<h4>',
             'title_after' => '</h4>',
@@ -40,7 +40,7 @@ if (have_posts()) {
             'between' => '<br />',
             'show_images' => false,
             'show_rating' => false,
-        );
+        ];
 
         wp_list_bookmarks($args);
 ?>

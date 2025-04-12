@@ -125,14 +125,17 @@ function suffusion_include_dbx() {
 
 function suffusion_include_custom_js($location = 'footer') {
 	echo "<!-- location $location -->\n";
-	$script = "suf_custom_{$location}_js";
-	global $$script;
-	if (isset($$script) && trim($$script) != "") {?>
+	$script_var = "suf_custom_{$location}_js";
+	
+	$script_content = $GLOBALS[$script_var] ?? '';
+	
+	if (!empty($script_content)) {
+?>
 <!-- Custom JavaScript for <?php echo $location; ?> defined in options -->
 <script type="text/javascript">
 /* <![CDATA[ */
 <?php
-		$strip = stripslashes($$script);
+		$strip = stripslashes($script_content);
 		$strip = wp_specialchars_decode($strip, ENT_QUOTES);
 		echo $strip."\n";
 ?>
@@ -546,10 +549,7 @@ function suffusion_get_sidebar_count_for_view($count, $position = 'right', $cont
 	foreach ($suffusion_sidebar_context_presets as $preset) {
 		if (in_array($preset, $context)) {
 			$count_option = "suf_{$preset}_sidebar_count";
-			global $$count_option;
-			if (isset($$count_option)) {
-				$special_template = $$count_option;
-			}
+			$special_template = $GLOBALS[$count_option] ?? null;
 		}
 	}
 
@@ -604,10 +604,7 @@ function suffusion_get_pseudo_template_class() {
 	foreach ($suffusion_sidebar_context_presets as $preset) {
 		if (in_array($preset, $context)) {
 			$count_option = "suf_{$preset}_sidebar_count";
-			global $$count_option;
-			if (isset($$count_option)) {
-				$special_template = $$count_option;
-			}
+			$special_template = $GLOBALS[$count_option] ?? null;
 		}
 	}
 

@@ -14,22 +14,43 @@
  * @since: 4.0.0
  */
 class Suffusion_MM_Walker extends Walker_Nav_Menu {
-	function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0) {
-		if ($depth == 0) {
+	/**
+	 * Start the element output.
+	 *
+	 * @param string $output            Used to append additional content (passed by reference).
+	 * @param object $item              Menu item data object.
+	 * @param int    $depth             Depth of menu item.
+	 * @param array  $args              An array of additional arguments.
+	 * @param int    $id                Nav menu ID.
+	 * @return void
+	 */
+	public function start_el(&$output, $item, $depth = 0, $args = [], $id = 0): void {
+		if ($depth === 0) {
 			$parent_id = $item->menu_item_parent;
-			if ($parent_id != 0) {
+			if ($parent_id !== 0) {
 				return;
 			}
 		}
-		parent::start_el($output, $item, $depth, $args, $id = 0);
+		parent::start_el($output, $item, $depth, $args, $id);
 	}
 
-	function display_element($element, &$children_elements, $max_depth, $depth, $args, &$output) {
+	/**
+	 * Display element.
+	 *
+	 * @param object $element           Data object.
+	 * @param array  $children_elements List of elements to continue traversing (passed by reference).
+	 * @param int    $max_depth         Max depth to traverse.
+	 * @param int    $depth             Depth of current element.
+	 * @param array  $args              An array of arguments.
+	 * @param string $output            Used to append additional content (passed by reference).
+	 * @return void
+	 */
+	public function display_element($element, &$children_elements, $max_depth, $depth, $args, &$output): void {
 		// For nested levels we want to check if the parent is mega-menu enabled. If so, we shouldn't print the children.
-		if ($depth == 1) {
+		if ($depth === 1) {
 			$parent_id = $element->menu_item_parent;
 			$selection = get_post_meta($parent_id, 'suf_mm_warea', true);
-			if (isset($selection) && $selection != '') {
+			if (isset($selection) && $selection !== '') {
 				return;
 			}
 		}

@@ -18,6 +18,9 @@
  */
 
 class Suffusion_Subscription extends WP_Widget {
+	private $icon_suffixes;
+	private $follow_urls;
+
 	function __construct() {
 		$widget_ops = array(
             'classname' => 'widget-suf-subscription',
@@ -25,7 +28,28 @@ class Suffusion_Subscription extends WP_Widget {
 		$control_ops = array('width' => 840);
 
 		parent::__construct("suf-subscription", __("Follow Me", "suffusion"), $widget_ops, $control_ops);
+        
+        // Initialize properties
         $this->icon_suffixes = array();
+        $this->follow_urls = array(
+            'Bluesky' => array('account' => 'https://bsky.app/profile/%account%'),
+            'Delicious' => array('account' => 'https://delicious.com/%account%'),
+            'Discord' => array('url' => '%account%'),
+            'Digg' => array('account' => 'https://www.digg.com/users/%account%'),
+            'Facebook' => array('url' => '%account%'),
+            'Flickr' => array('account' => 'https://flickr.com/photos/%account%'),
+            'LinkedIn' => array('url' => '%account%'),
+            'Mastodon' => array('url' => '%account%'),
+            'Reddit' => array('account' => 'https://www.reddit.com/user/%account%'),
+            'RSS' => array('account' => 'https://feeds.feedburner.com/%account%'),
+            'StumbleUpon' => array('account' => 'https://%account%.stumbleupon.com'),
+            'Technorati' => array('account' => 'https://technorati.com/people/technorati/%account%/'),
+            'Twitter' => array('account' => 'https://twitter.com/%account%'),
+            'Google+' => array('url' => '%account%'),
+            'YouTube' => array('account' => 'https://www.youtube.com/%account%'),
+        );
+
+        // Load icon suffixes
         $image_path = opendir(get_template_directory() . "/images/follow");
         while (false !== ($icon = readdir($image_path))) {
 			if (!($icon == "." || $icon == "..")) {
@@ -42,24 +66,8 @@ class Suffusion_Subscription extends WP_Widget {
             	}
 			}
         }
-        $this->follow_urls = array(
-            'Delicious' => array('account' => 'https://delicious.com/%account%'),
-            'Digg' => array('account' => 'https://www.digg.com/users/%account%'),
-            'Facebook' => array('url' => '%account%'),
-            'Flickr' => array('account' => 'https://flickr.com/photos/%account%'),
-            'LinkedIn' => array('url' => '%account%'),
-            'Reddit' => array('account' => 'https://www.reddit.com/user/%account%'),
-            'RSS' => array('account' => 'https://feeds.feedburner.com/%account%'),
-            'StumbleUpon' => array('account' => 'https://%account%.stumbleupon.com'),
-            'Technorati' => array('account' => 'https://technorati.com/people/technorati/%account%/'),
-            'Twitter' => array('account' => 'https://twitter.com/%account%'),
-			'Google+' => array('url' => '%account%'),
-			'YouTube' => array('account' => 'https://www.youtube.com/%account%'),
-		);
 	}
-	function Suffusion_Subscription() {
-			self::__construct();		
-	}
+
     function form($instance) {
         $defaults = array("title" => __("Follow Me", "suffusion"),
             "feed" => __("your-feed-name", "suffusion"),
